@@ -1,0 +1,50 @@
+<div class="row row-cols-1 row-cols-md g-4">
+  <div class="col" *ngIf="car">
+    <div class="card h-100 text-center text-light" style="background-color: #2c3034;">
+
+      <!-- Slider -->
+      <div *ngIf="car.carImage.length > 0; else noImageBlock" id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+          <!-- <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true"></button> -->
+          <button *ngFor="let imgCount of car.carImage; let imgIndex = index;" [class]="(imgIndex == 1) ? 'active' : ''"
+          type="button" data-bs-target="#carouselExampleIndicators" [attr.data-bs-slide-to]="imgIndex"></button>
+          
+        </div>
+
+        <div class="carousel-inner">
+          <div *ngFor="let img of car.carImage; let index = index;" [class]="(index == 0) ? 'carousel-item active' : 'carousel-item'">
+            <img src="https://localhost:44306/{{ img }}" class="d-block w-100" alt="..." style="height: 34rem;object-fit: cover;">
+          </div>
+        </div>
+
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+
+      <ng-template #noImageBlock><img src="https://localhost:44306/Images/noimage.png" class="d-block w-100" alt="..." style="height: 34rem;object-fit: cover;"></ng-template>
+
+      <div class="card-body">
+        <h5 class="card-title">{{car.brandName}}</h5>
+        <p class="card-text">{{car.description}}</p>
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item" style="background-color: #2c3034;">Renk: {{car.colorName}}</li>
+        <li class="list-group-item" style="background-color: #2c3034;">Model Yılı: {{car.modelYear}}</li>
+        <li class="list-group-item" style="background-color: #2c3034;">{{car.dailyPrice | currency: "₺"}}</li>
+      </ul>
+      <div class="card-body d-inline-flex justify-content-evenly">
+        <button type="button" routerLink="/car-detail/{{car.carId}}" class="btn btn-success align-self-end">Kirala</button>
+      </div>
+      <div class="card-footer">
+        <small class="text-muted">Kiralanabilir.</small>
+      </div>
+    </div>
+  </div>
+
+</div>

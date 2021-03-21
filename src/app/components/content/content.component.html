@@ -1,0 +1,56 @@
+<!-- <h4 class="text-light">Rentals</h4>
+<table class="table table-dark table-striped table-bordered table-hover">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Customer</th>
+        <th scope="col">Brand</th>
+        <th scope="col">Color</th>
+        <th scope="col">Model Year</th>
+        <th scope="col">Rented Date</th>
+        <th scope="col">Return Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let rental of rentals; let index = index;">
+        <td scope="row">{{index+1}}</td>
+        <td>{{rental.customer}}</td>
+        <td>{{rental.carBrand}}</td>
+        <td>{{rental.carColor}}</td>
+        <td>{{rental.carModelYear}}</td>
+        <td>{{rental.rentedDate | date:"d/M/y" }}</td>
+        <td>{{rental.returnDate | date:"d/M/y"}}</td>
+      </tr>
+    </tbody>
+  </table> -->
+
+
+
+<h4 class="text-light">Cars</h4>
+
+<!-- ########################################## -->
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+  <div *ngFor="let car of cars" class="col">
+    <div class="card h-100 text-center text-light" style="background-color: #2c3034;">
+      <img src="https://localhost:44306/{{car.carImage[0] ? car.carImage[0] : 'Images/noimage.png' }}" class="card-img-top" style="object-fit: cover;height: 10.7rem;" alt="...">
+      <div class="card-body">
+        <h5 class="card-title">{{car.brandName}} - {{car.carId}}</h5>
+        <p class="card-text">{{car.description}}</p>
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item" style="background-color: #2c3034;">Renk: {{car.colorName}}</li>
+        <li class="list-group-item" style="background-color: #2c3034;">Model Yılı: {{car.modelYear}}</li>
+        <li class="list-group-item" style="background-color: #2c3034;">{{car.dailyPrice}}</li>
+      </ul>
+      <div class="card-body d-inline-flex justify-content-evenly">
+        <button type="button" routerLink="/car-detail/{{car.carId}}" class="btn btn-info align-self-end">İncele</button>
+        <button type="button" routerLink="/car-detail/{{car.carId}}" class="btn btn-success align-self-end">Kirala</button>
+      </div>
+      <div class="card-footer">
+        <small class="text-muted">Kiralanabilir.</small>
+      </div>
+    </div>
+  </div>
+
+</div>
