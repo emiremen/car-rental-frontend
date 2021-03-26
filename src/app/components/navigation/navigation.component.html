@@ -1,36 +1,154 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">Navbar</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Link</a>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Dropdown
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li><a class="dropdown-item" href="#">Action</a></li>
-              <li><a class="dropdown-item" href="#">Another action</a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="#">Something else here</a></li>
-            </ul>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-          </li>
-        </ul>
-        <form class="d-flex">
-          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-success" type="submit">Search</button>
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Car Rental</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="#">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Item</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+            aria-expanded="false">
+            <i class="bi bi-plus-circle"></i>Yeni
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#addCarModal"><i class="fas fa-car"></i>Araç</a></li>
+            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#addBrandModal"><i class="fas fa-copyright"></i>Marka</a></li>
+            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#addColorModal"><i class="fas fa-palette"></i>Renk</a></li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li><a class="dropdown-item" href="#">Something else here</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Item</a>
+        </li>
+      </ul>
+      <form class="d-flex">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form>
+    </div>
+  </div>
+</nav>
+
+
+
+<!-- Add Car Modal -->
+<div class="modal fade" id="addCarModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Araç Ekleme Formu</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Form -->
+        <form [formGroup]="carAddForm">
+          <div class="form-group mb-3">
+            <label for="brandId" class="form-label">Marka</label>
+
+            <select formControlName="brandId" class="form-select" id="brandId" aria-label="Marka seçiniz." required>
+              <option value="" disabled selected hidden>Marka seçiniz.</option>
+              <option *ngFor="let brand of allBrands" value="{{brand.id}}">{{brand.carBrand}}</option>
+            </select>
+          </div>
+          <div class="form-group mb-3">
+            <label for="modelYear" class="form-label">Model Yılı</label>
+            <input type="number" formControlName="modelYear" class="form-control" id="modelYear"
+              placeholder="Model Yılı giriniz.">
+          </div>
+          <div class="form-group mb-3">
+            <label for="colorId" class="form-label">Renk</label>
+            <select formControlName="colorId" class="form-select" id="colorId" aria-label="Renk seçiniz." required>
+              <option value="" disabled selected hidden>Renk seçiniz.</option>
+              <option *ngFor="let color of allColors" value="{{color.id}}">{{color.carColor}}</option>
+            </select>
+          </div>
+          <div class="form-group mb-3">
+            <label for="dailyPrice" class="form-label">Ücret</label>
+            <input type="number" formControlName="dailyPrice" class="form-control" id="dailyPrice"
+              placeholder="Günlük ücret giriniz.">
+          </div>
+          <div class="form-group mb-3">
+            <label for="description" class="form-label">Açıklama</label>
+            <textarea class="form-control" formControlName="description" id="description" rows="3"
+              placeholder="Açıklama giriniz."></textarea>
+          </div>
+
+          <div class="form-group mb-3 mt-5">
+            <label for="file" class="form-label">Resim (opsiyonel)</label>
+            <input type="file" (change)="onFileChange($event)" class="form-control" id="file"
+              placeholder="Renk giriniz." accept="image/*" multiple>
+          </div>
+          <div class="{{imgUploadSuccess ? 'alert alert-success' : 'alert alert-danger' }}"
+            [style]="imgUploadSuccess == undefined ? 'display:none' : 'display:block'" role="alert">
+            {{imgUploadSuccess ? "Resim başarıyla eklendi" : "Resim ekleme işlemi başarısız."}}
+          </div>
         </form>
+        <!-- Form -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+        <button type="button" class="btn btn-primary" (click)="addCar()">Ekle</button>
       </div>
     </div>
-  </nav>
+  </div>
+</div>
+
+<!-- Add Brand Modal -->
+<div class="modal fade" id="addBrandModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Marka Ekleme Formu</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+          <div class="form-group mb-3">
+            <label for="toAddBrandName" class="form-label">Marka</label>
+            <input #brandInput type="text" class="form-control" id="toAddBrandName"
+              placeholder="Marka giriniz.">
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+        <button type="button" class="btn btn-primary" (click)="addBrand(brandInput.value)">Ekle</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Color Modal -->
+<div class="modal fade" id="addColorModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Renk Ekleme Formu</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+          <div class="form-group mb-3">
+            <label for="toAddColorName" class="form-label">Renk</label>
+            <input #colorInput type="text" class="form-control" id="toAddColorName"
+              placeholder="Renk giriniz.">
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+        <button type="button" class="btn btn-primary" (click)="addColor(colorInput.value)">Ekle</button>
+      </div>
+    </div>
+  </div>
+</div>

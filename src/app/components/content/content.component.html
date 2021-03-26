@@ -26,16 +26,22 @@
 
 
 
-<h4 class="text-light">Cars</h4>
-
 <!-- ########################################## -->
 
+<div class="mb-3" style="margin-top: 2.4rem;">
+  <input type="text" [(ngModel)]="filterText" class="form-control" id="filterText" placeholder="Ürün Ara...">
+</div>
+<div *ngIf="filterText" class="alert alert-primary">
+{{filterText}} aradınız.
+</div>
+
+<h4 class="text-light">Cars</h4>
 <div class="row row-cols-1 row-cols-md-3 g-4">
-  <div *ngFor="let car of cars" class="col">
+  <div *ngFor="let car of cars | filterPipe: filterText" class="col">
     <div class="card h-100 text-center text-light" style="background-color: #2c3034;">
       <img src="https://localhost:44306/{{car.carImage[0] ? car.carImage[0] : 'Images/noimage.png' }}" class="card-img-top" style="object-fit: cover;height: 10.7rem;" alt="...">
       <div class="card-body">
-        <h5 class="card-title">{{car.brandName}} - {{car.carId}}</h5>
+        <h5 class="card-title">{{car.brandName}}</h5>
         <p class="card-text">{{car.description}}</p>
       </div>
       <ul class="list-group list-group-flush">

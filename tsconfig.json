@@ -5,6 +5,8 @@
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
+    "strictNullChecks": false, //
+    "strictPropertyInitialization": false, //
     "strict": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,

@@ -1,45 +1,55 @@
 <div class="row row-cols-1 row-cols-md g-4">
-  <div class="col" *ngIf="car">
+  <div class="col" *ngIf="carDto">
     <div class="card h-100 text-center text-light" style="background-color: #2c3034;">
 
       <!-- Slider -->
-      <div *ngIf="car.carImage.length > 0; else noImageBlock" id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+      <div *ngIf="carDto.carImage.length > 0; else noImageBlock" id="carouselExampleIndicators" class="carousel slide"
+        data-bs-ride="carousel">
         <div class="carousel-indicators">
           <!-- <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true"></button> -->
-          <button *ngFor="let imgCount of car.carImage; let imgIndex = index;" [class]="(imgIndex == 1) ? 'active' : ''"
-          type="button" data-bs-target="#carouselExampleIndicators" [attr.data-bs-slide-to]="imgIndex"></button>
-          
+          <button *ngFor="let imgCount of carDto.carImage; let imgIndex = index;" [class]="(imgIndex == 1) ? 'active' : ''"
+            type="button" data-bs-target="#carouselExampleIndicators" [attr.data-bs-slide-to]="imgIndex"></button>
+
         </div>
 
         <div class="carousel-inner">
-          <div *ngFor="let img of car.carImage; let index = index;" [class]="(index == 0) ? 'carousel-item active' : 'carousel-item'">
-            <img src="https://localhost:44306/{{ img }}" class="d-block w-100" alt="..." style="height: 34rem;object-fit: cover;">
+          <div *ngFor="let img of carDto.carImage; let index = index;"
+            [class]="(index == 0) ? 'carousel-item active' : 'carousel-item'">
+            <img src="https://localhost:44306/{{ img }}" class="d-block w-100" alt="..."
+              style="height: 34rem;object-fit: cover;">
           </div>
         </div>
 
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
+          data-bs-slide="prev">
           <span class="carousel-control-prev-icon" aria-hidden="true"></span>
           <span class="visually-hidden">Previous</span>
         </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
+          data-bs-slide="next">
           <span class="carousel-control-next-icon" aria-hidden="true"></span>
           <span class="visually-hidden">Next</span>
         </button>
       </div>
 
-      <ng-template #noImageBlock><img src="https://localhost:44306/Images/noimage.png" class="d-block w-100" alt="..." style="height: 34rem;object-fit: cover;"></ng-template>
+      <ng-template #noImageBlock><img src="https://localhost:44306/Images/noimage.png" class="d-block w-100" alt="..."
+          style="height: 34rem;object-fit: cover;"></ng-template>
 
       <div class="card-body">
-        <h5 class="card-title">{{car.brandName}}</h5>
-        <p class="card-text">{{car.description}}</p>
+        <h5 class="card-title">{{carDto.brandName}}</h5>
+        <p class="card-text">{{carDto.description}}</p>
       </div>
       <ul class="list-group list-group-flush">
-        <li class="list-group-item" style="background-color: #2c3034;">Renk: {{car.colorName}}</li>
-        <li class="list-group-item" style="background-color: #2c3034;">Model Yılı: {{car.modelYear}}</li>
-        <li class="list-group-item" style="background-color: #2c3034;">{{car.dailyPrice | currency: "₺"}}</li>
+        <li class="list-group-item" style="background-color: #2c3034;">Renk: {{carDto.colorName}}</li>
+        <li class="list-group-item" style="background-color: #2c3034;">Model Yılı: {{carDto.modelYear}}</li>
+        <li class="list-group-item" style="background-color: #2c3034;">{{carDto.dailyPrice | currency: "₺"}}</li>
       </ul>
       <div class="card-body d-inline-flex justify-content-evenly">
-        <button type="button" routerLink="/car-detail/{{car.carId}}" class="btn btn-success align-self-end">Kirala</button>
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary p-3" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+          Aracı Kirala
+        </button>
+
       </div>
       <div class="card-footer">
         <small class="text-muted">Kiralanabilir.</small>
@@ -47,4 +57,66 @@
     </div>
   </div>
 
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Araç Kiralama Formu</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Form -->
+        <form [formGroup]="carAddForm">
+          <div class="form-group mb-3">
+            <label for="brandId" class="form-label">Marka</label>
+
+            <select formControlName="brandId" class="form-select" id="brandId" aria-label="Marka seçiniz." required>
+              <option value="" disabled selected hidden>Marka seçiniz.</option>
+              <option value="1">Audi</option>
+              <option value="2">Tesla</option>
+              <option value="3">BMW</option>
+            </select>
+          </div>
+          <div class="form-group mb-3">
+            <label for="modelYear" class="form-label">Model Yılı</label>
+            <input type="number" formControlName="modelYear" class="form-control" id="modelYear" placeholder="Model Yılı giriniz.">
+          </div>
+          <div class="form-group mb-3">
+            <label for="colorId" class="form-label">Renk</label>
+            <select formControlName="colorId" class="form-select" id="colorId" aria-label="Renk seçiniz." required>
+              <option value="" disabled selected hidden>Renk seçiniz.</option>
+              <option value="1">Beyaz</option>
+              <option value="2">Gümüş</option>
+              <option value="3">Siyah</option>
+            </select>
+          </div>
+          <div class="form-group mb-3">
+            <label for="dailyPrice" class="form-label">Ücret</label>
+            <input type="number" formControlName="dailyPrice" class="form-control" id="dailyPrice" placeholder="Günlük ücret giriniz.">
+          </div>
+          <div class="form-group mb-3">
+            <label for="description" class="form-label">Açıklama</label>
+            <textarea class="form-control" formControlName="description" id="description" rows="3" placeholder="Açıklama giriniz."></textarea>
+          </div>
+        
+          <div class="form-group mb-3 mt-5">            
+            <label for="file" class="form-label">Resim (opsiyonel)</label>
+            <input type="file" (change)="onFileChange($event)" class="form-control" id="file" placeholder="Renk giriniz." accept="image/*" multiple>
+          </div>
+          <div class="{{imgUploadSuccess ? 'alert alert-success' : 'alert alert-danger' }}" [style] ="imgUploadSuccess == undefined ? 'display:none' : 'display:block'" role="alert">
+            {{imgUploadSuccess ? "Resim başarıyla eklendi" : "Resim ekleme işlemi başarısız."}}
+          </div>
+        </form>
+        <!-- Form -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+        <button type="button" class="btn btn-primary" (click)="addCar()">Kirala</button>
+      </div>
+    </div>
+  </div>
 </div>

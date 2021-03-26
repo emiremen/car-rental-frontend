@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Car } from 'src/app/models/car';
+import { CarDto } from 'src/app/models/carDto';
 import { Color } from 'src/app/models/color';
 import { Rental } from 'src/app/models/rental';
 import { CarService } from 'src/app/services/car.service';
@@ -13,11 +13,13 @@ import { RentalService } from 'src/app/services/rental.service';
 })
 export class ContentComponent implements OnInit {
 
-  cars: Car[] = [];
+  cars: CarDto[] = [];
   rentals: Rental[] = [];
 
   rentalsLoaded: boolean = false;
   carsLoaded: boolean = false;
+
+  filterText:string = "";
 
   constructor(private carService: CarService, private rentalService: RentalService, private activatedRoute: ActivatedRoute) { }
 
@@ -37,9 +39,6 @@ export class ContentComponent implements OnInit {
       }
     });
 
-    if(Object.getOwnPropertyNames(this.cars)){
-
-    }
   }
 
   ///////// Cars /////////
