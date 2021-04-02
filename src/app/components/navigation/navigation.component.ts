@@ -17,11 +17,11 @@ export class NavigationComponent implements OnInit {
 
   carAddForm: FormGroup;
   savedCar: any;
-  imgUploadSuccess?: boolean;
+  imgUploadSuccess: boolean;
   imgFile: File[] = [];
 
-  toSaveBrand: Brand;
-  toSaveColor: Color;
+  toSaveBrand: Brand= {id:null, carBrand: null};
+  toSaveColor: Color= {id:null, carColor: null};
 
   allBrands: Brand[] = [];
   allColors: Color[] = [];
@@ -96,17 +96,14 @@ export class NavigationComponent implements OnInit {
   }
 
   addBrand(brandName:string) {
-    this.toSaveBrand.carBrand = brandName;
-    this.brandService.addBrand(this.toSaveBrand).subscribe(response => {
+    this.brandService.addBrand(brandName).subscribe(response => {
       if (response.success) {
         this.toastrService.success("Yeni marka başarılı bir şekilde eklendi.", "Başarılı")
       }
     });
   }
   addColor(colorName:string) {
-    console.info(colorName)
-    this.toSaveColor.carColor = colorName;
-    this.colorService.addColor(this.toSaveColor).subscribe(response => {
+    this.colorService.addColor(colorName).subscribe(response => {
       if (response.success) {
         this.toastrService.success("Yeni renk başarılı bir şekilde eklendi.", "Başarılı")
       }

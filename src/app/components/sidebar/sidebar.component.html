@@ -15,26 +15,3 @@
   <li *ngFor="let color of colors" (click)="setCurrentColor(color)" [class]="getCurrentColorClass(color)"
     ><i class="bi bi-caret-right-fill px-2"></i>{{color.carColor}}</li>
 </ul>
-
-
-
-
-<!-- 
-
-<h4 class="text-light">Brands</h4>
-<ul class="list-group rounded-1">
-  <li [class]="getAllBrandsClass()" (click)="clearCurrentBrand()" routerLink="/content/cars"><i
-      class="bi bi-caret-right-fill px-2"></i>Tüm Markalar</li>
-  <li *ngFor="let brand of brands" (click)="setCurrentBrand(brand)" [class]="getCurrentBrandClass(brand)"
-    routerLink="/content/cars/brand/{{brand.carBrand}}"><i class="bi bi-caret-right-fill px-2"></i>{{brand.carBrand}}</li>
-</ul>
-
-<h4 class="text-light">Colors</h4>
-<ul class="list-group rounded-1">
-  <li [class]="getAllColorsClass()" (click)="clearCurrentColor()" routerLink="/content/cars"><i
-      class="bi bi-caret-right-fill px-2"></i>Tüm Renkler</li>
-  <li *ngFor="let color of colors" (click)="setCurrentColor(color)" [class]="getCurrentColorClass(color)"
-    routerLink="/content/cars/color/{{color.carColor}}"><i class="bi bi-caret-right-fill px-2"></i>{{color.carColor}}</li>
-</ul>
-
- -->

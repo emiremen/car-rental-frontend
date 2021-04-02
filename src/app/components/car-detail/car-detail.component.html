@@ -6,9 +6,9 @@
       <div *ngIf="carDto.carImage.length > 0; else noImageBlock" id="carouselExampleIndicators" class="carousel slide"
         data-bs-ride="carousel">
         <div class="carousel-indicators">
-          <!-- <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true"></button> -->
-          <button *ngFor="let imgCount of carDto.carImage; let imgIndex = index;" [class]="(imgIndex == 1) ? 'active' : ''"
-            type="button" data-bs-target="#carouselExampleIndicators" [attr.data-bs-slide-to]="imgIndex"></button>
+          <button *ngFor="let imgCount of carDto.carImage; let imgIndex = index;"
+            [class]="(imgIndex == 1) ? 'active' : ''" type="button" data-bs-target="#carouselExampleIndicators"
+            [attr.data-bs-slide-to]="imgIndex"></button>
 
         </div>
 
@@ -36,17 +36,18 @@
           style="height: 34rem;object-fit: cover;"></ng-template>
 
       <div class="card-body">
-        <h5 class="card-title">{{carDto.brandName}}</h5>
+        <h5 class="card-title" #brandName>{{carDto.brandName}}</h5>
         <p class="card-text">{{carDto.description}}</p>
       </div>
       <ul class="list-group list-group-flush">
-        <li class="list-group-item" style="background-color: #2c3034;">Renk: {{carDto.colorName}}</li>
-        <li class="list-group-item" style="background-color: #2c3034;">Model Yılı: {{carDto.modelYear}}</li>
-        <li class="list-group-item" style="background-color: #2c3034;">{{carDto.dailyPrice | currency: "₺"}}</li>
+        <li class="list-group-item" style="background-color: #2c3034;" #colorName>Renk: {{carDto.colorName}}</li>
+        <li class="list-group-item" style="background-color: #2c3034;" #modelYear>Model Yılı: {{carDto.modelYear}}</li>
+        <li class="list-group-item" style="background-color: #2c3034;" #dailyPrice>{{carDto.dailyPrice | currency: "₺"}}
+        </li>
       </ul>
       <div class="card-body d-inline-flex justify-content-evenly">
         <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary p-3" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+        <button type="button" class="btn btn-primary p-3" href="#kiralaModal" data-bs-toggle="modal">
           Aracı Kirala
         </button>
 
@@ -59,63 +60,116 @@
 
 </div>
 
-<!-- Modal -->
-<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<!-- Rent Modal -->
+<div class="modal fade" id="kiralaModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  *ngIf="carDto != null || carDto != undefined" aria-labelledby="kiralaModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="staticBackdropLabel">Araç Kiralama Formu</h5>
+        <h5 class="modal-title" id="kiralaModalLabel">Araç Kiralama Formu</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <!-- Form -->
-        <form [formGroup]="carAddForm">
+        <form [formGroup]="rentalAddForm" *ngIf="carDto">
           <div class="form-group mb-3">
-            <label for="brandId" class="form-label">Marka</label>
+            <label for="customer" class="form-label">Müşteri</label>
+            <input type="text" class="form-control bg-white border-0 pe-none" id="customer"
+              placeholder="-musteri adi-" readonly>
 
-            <select formControlName="brandId" class="form-select" id="brandId" aria-label="Marka seçiniz." required>
-              <option value="" disabled selected hidden>Marka seçiniz.</option>
-              <option value="1">Audi</option>
-              <option value="2">Tesla</option>
-              <option value="3">BMW</option>
-            </select>
           </div>
           <div class="form-group mb-3">
-            <label for="modelYear" class="form-label">Model Yılı</label>
-            <input type="number" formControlName="modelYear" class="form-control" id="modelYear" placeholder="Model Yılı giriniz.">
+            <label for="carBrand" class="form-label">Marka</label>
+            <input type="text" class="form-control bg-white border-0 pe-none" id="carBrand"
+              placeholder="{{carDto.brandName}}" readonly>
           </div>
           <div class="form-group mb-3">
-            <label for="colorId" class="form-label">Renk</label>
-            <select formControlName="colorId" class="form-select" id="colorId" aria-label="Renk seçiniz." required>
-              <option value="" disabled selected hidden>Renk seçiniz.</option>
-              <option value="1">Beyaz</option>
-              <option value="2">Gümüş</option>
-              <option value="3">Siyah</option>
-            </select>
+            <label for="carColor" class="form-label">Renk</label>
+            <input type="text" class="form-control bg-white border-0 pe-none" id="carColor"
+              placeholder="{{carDto.colorName}}" readonly>
           </div>
           <div class="form-group mb-3">
-            <label for="dailyPrice" class="form-label">Ücret</label>
-            <input type="number" formControlName="dailyPrice" class="form-control" id="dailyPrice" placeholder="Günlük ücret giriniz.">
+            <label for="carModelYear" class="form-label">Model Yılı</label>
+            <input type="number" class="form-control bg-white border-0 pe-none" id="carModelYear"
+              placeholder="{{carDto.modelYear}}" readonly>
           </div>
           <div class="form-group mb-3">
-            <label for="description" class="form-label">Açıklama</label>
-            <textarea class="form-control" formControlName="description" id="description" rows="3" placeholder="Açıklama giriniz."></textarea>
-          </div>
-        
-          <div class="form-group mb-3 mt-5">            
-            <label for="file" class="form-label">Resim (opsiyonel)</label>
-            <input type="file" (change)="onFileChange($event)" class="form-control" id="file" placeholder="Renk giriniz." accept="image/*" multiple>
-          </div>
-          <div class="{{imgUploadSuccess ? 'alert alert-success' : 'alert alert-danger' }}" [style] ="imgUploadSuccess == undefined ? 'display:none' : 'display:block'" role="alert">
-            {{imgUploadSuccess ? "Resim başarıyla eklendi" : "Resim ekleme işlemi başarısız."}}
+            <label for="returnDate" class="form-label">Dönüş Tarihi</label>
+            <input [(ngModel)]="returnDateInput" type="date" class="form-control" formControlName="returnDate"
+              id="returnDate" min="{{startDateForInput}}" [max]="endDateForInput">
           </div>
         </form>
         <!-- Form -->
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
-        <button type="button" class="btn btn-primary" (click)="addCar()">Kirala</button>
+        <button type="button" (click)="kirala()" class="btn-rent btn btn-primary" data-bs-target="#odeModal"
+          data-bs-toggle="modal" data-bs-dismiss="modal" [disabled]="returnDateInput ? false : true">Kirala</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Payment Modal -->
+<div class="modal fade" id="odeModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  *ngIf="carDto != null || carDto != undefined" aria-labelledby="odeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="odeModalLabel">Araç Kiralama Formu</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+        <div class="card">
+          <div class="card-title d-flex px-4">
+            <p class="item text-muted">{{carDto.brandName}}</p>
+            <p>{{amount}}₺</p>
+          </div>
+          <div class="card-body">
+            <div class="card credit-card col-9 text-light border mx-auto"
+              style="height: 11rem; background: linear-gradient(120deg, #3a609b 50%, #0679a7 100%); ">
+              <div class="card mx-4 my-5 position-absolute end-0" style="width:3rem;height: 2rem; background: #ffd000">
+              </div>
+              <div id="card-number" class="mt-3 position-absolute top-50 start-50 translate-middle text-nowrap">
+                {{cardNumberInput ? cardNumberInput : ''}}</div>
+              <div class="card-user m-3 position-absolute bottom-0">{{cardUserNameInput ? cardUserNameInput : 'Your
+                Name'}}</div>
+              <div class="card-exp m-3 mb-0 position-absolute end-0 bottom-0 "
+                style="font-size: 12px; text-align: center;">Expiry Date <p>{{cardExpiryDateInput ? cardExpiryDateInput
+                  : ''}}</p>
+              </div>
+            </div>
+            <!-- Form -->
+            <form [formGroup]="bankingForm" class="my-3">
+
+
+              <div class="numbr mb-3"> <i class=" col-1 fas fas fa-user text-muted p-0"></i>
+                <input type="text" id="nameOnCard" name="nameOnCard" formControlName="nameOnCard"
+                  [(ngModel)]="cardUserNameInput" class="col-10 p-0" placeholder="Name on Card" maxlength="20">
+              </div>
+
+              <div class="numbr mb-3"> <i class=" col-1 fas fa-credit-card text-muted p-0"></i>
+                <input type="number" id="cardNumber" name="cardNumber" formControlName="cardNumber" pattern="[0-9]{16}"
+                  [(ngModel)]="cardNumberInput" onKeyPress="if(this.value.length>=16) return false;" class="col-10 p-0"
+                  placeholder="Card Number" (input)="cardNumberSplit()">
+              </div>
+              <div class="line2 col-lg-12 col-12 mb-4 d-inline-flex justify-content-center"> <i
+                  class="col-1 far fa-calendar-minus text-muted p-0"></i>
+                <input class="cal col-5 p-0" type="text" name="expiryDate" formControlName="expiryDate"
+                  [(ngModel)]="cardExpiryDateInput" placeholder="MM/YY" maxlength="5">
+                <i class="col-1 fas fa-lock text-muted"></i> <input class="cvc col-5 p-0" type="number" name="cvc"
+                  onKeyPress="if(this.value.length>=4) return false;" formControlName="cvc" placeholder="CVC">
+              </div>
+            </form>
+          </div>
+        </div>
+        <!-- Form -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-target="#kiralaModal" data-bs-toggle="modal"
+          data-bs-dismiss="modal" [disabled]="disablePaymentFormSubmit">Geri</button>
+        <button type="button" class="btn btn-primary" (click)="ode()" [disabled]="disablePaymentFormSubmit">Öde</button>
       </div>
     </div>
   </div>

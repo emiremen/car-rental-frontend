@@ -125,19 +125,4 @@ export class SidebarComponent implements OnInit {
     console.log(this.routulacakLink);
 
   }
-  /*
-    setCurrentBrand(brand:Brand){
-    this.router.navigate(["/content/cars"], {queryParams: {brandName: this.currentBrand.carBrand}, queryParamsHandling: "merge", relativeTo: this.activatedRoute});
-    this.currentBrand = brand;
-    }
-  
-    setQueryParams(brand:Brand){
-      if(brand){
-        this.setCurrentBrand(brand);
-      }
-      else{
-        this.clearCurrentBrand();
-      }
-    }
-    */
 }

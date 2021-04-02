@@ -7,3 +7,96 @@ select:required:invalid {
   option {
     color: black;
   }
+
+  /* Payment Modal */
+
+.card-user{
+font-size: 12px;
+  }
+.modal-body .container {
+    margin-top: 40px;
+    margin-bottom: 40px
+}
+
+.modal-body img {
+    width: 100%
+}
+
+.modal-body .card-title {
+    justify-content: space-between;
+    margin-top: 25px
+}
+
+.register {
+    font-size: 10px;
+    position: relative;
+    bottom: 5px
+}
+
+
+.modal-body input {
+    border: none;
+    padding-left: 4px;
+    background-color: #f7f1f1;
+    font-size: 15px
+}
+
+.modal-body  .card-body {
+    background-color: #f7f1f1
+}
+
+.modal-body .footer {
+    background-color: #00BCD4;
+    color: white
+}
+
+.modal-body .footer:hover {
+    cursor: pointer;
+    background-color: #0097A7
+}
+
+.numbr {
+    border-bottom: 1px solid #c1bcbc;
+    padding-bottom: 8px
+}
+
+.line2 {
+    border-bottom: 1px solid #c1bcbc;
+    padding-bottom: 8px;
+    padding-left: 0px
+}
+
+.modal-body input.focus,
+.modal-body input:focus {
+    outline: 0;
+    box-shadow: none !important
+}
+
+.modal-body .numbr.numbr.hover,
+.modal-body .numbr:hover {
+    border-bottom: 1px solid rgb(0, 153, 255);
+}
+
+.modal-body .line2.hover,
+.modal-body .line2:hover {
+    border-bottom: 1px solid rgb(0, 153, 255);
+}
+
+.fa-lock {
+    margin-right: 10px
+}
+
+.modal-body .order {
+    margin-top: 10px
+}
+
+
+
+
+
+
+
+
+.credit-card{
+  font-family: "Orbitron";
+}

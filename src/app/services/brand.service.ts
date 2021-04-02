@@ -17,9 +17,7 @@ export class BrandService {
     return this.httpClient.get<ListResponseModel<Brand>>(this.apiUrl + "getall");
   }
 
-  addBrand(brand:Brand): Observable<ListResponseModel<Brand>> {
-    const brandFormData = new FormData();
-    brandFormData.append("brand", brand.carBrand)
-    return this.httpClient.post<ListResponseModel<Brand>>(this.apiUrl + "add", brandFormData);
+  addBrand(carBrand:string): Observable<ListResponseModel<Brand>> {
+    return this.httpClient.post<ListResponseModel<Brand>>(this.apiUrl + "add", {carBrand});// gönderdiğin değişken ismi ile backenddeki sınıf içerisindeki isim aynı olmalı
   }
 }

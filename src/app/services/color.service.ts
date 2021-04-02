@@ -17,10 +17,8 @@ export class ColorService {
     return this.httpClient.get<ListResponseModel<Color>>(this.apiUrl + "getall");
   }
 
-  addColor(color:Color): Observable<ListResponseModel<Color>> {
-    const colorFormData = new FormData();
-    colorFormData.append("brand", color.carColor)
-    return this.httpClient.post<ListResponseModel<Color>>(this.apiUrl + "add", color);
+  addColor(carColor:string): Observable<ListResponseModel<Color>> {
+    return this.httpClient.post<ListResponseModel<Color>>(this.apiUrl + "add", {carColor});
   }
 
 }

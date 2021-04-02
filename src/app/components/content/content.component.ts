@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CarDto } from 'src/app/models/carDto';
 import { Color } from 'src/app/models/color';
-import { Rental } from 'src/app/models/rental';
+import { RentalsDto } from 'src/app/models/rentalDto';
 import { CarService } from 'src/app/services/car.service';
 import { RentalService } from 'src/app/services/rental.service';
 
@@ -14,7 +14,7 @@ import { RentalService } from 'src/app/services/rental.service';
 export class ContentComponent implements OnInit {
 
   cars: CarDto[] = [];
-  rentals: Rental[] = [];
+  rentals: RentalsDto[] = [];
 
   rentalsLoaded: boolean = false;
   carsLoaded: boolean = false;
