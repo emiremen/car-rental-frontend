@@ -8,21 +8,37 @@ select:required:invalid {
     color: black;
   }
 
+.bi-x-circle-fill{
+  position: relative;
+    left: -20px;
+    top: -10px;
+  }
+.bi-x-circle-fill:before {
+    position: relative;
+    top: 2px;
+    border-radius: 50%;
+    background-color: white;
+}
+
+.bi-x-circle-fill:hover{
+  box-shadow: 2px 2px 4px 0px black;
+  }
+  
   /* Payment Modal */
 
 .card-user{
 font-size: 12px;
   }
-.modal-body .container {
+  #kiralaModal .container {
     margin-top: 40px;
     margin-bottom: 40px
 }
 
-.modal-body img {
+#kiralaModal img {
     width: 100%
 }
 
-.modal-body .card-title {
+#kiralaModal .card-title {
     justify-content: space-between;
     margin-top: 25px
 }
@@ -34,23 +50,23 @@ font-size: 12px;
 }
 
 
-.modal-body input {
+#kiralaModal input {
     border: none;
     padding-left: 4px;
     background-color: #f7f1f1;
     font-size: 15px
 }
 
-.modal-body  .card-body {
+#kiralaModal  .card-body {
     background-color: #f7f1f1
 }
 
-.modal-body .footer {
+#kiralaModal .footer {
     background-color: #00BCD4;
     color: white
 }
 
-.modal-body .footer:hover {
+#kiralaModal .footer:hover {
     cursor: pointer;
     background-color: #0097A7
 }
@@ -66,19 +82,19 @@ font-size: 12px;
     padding-left: 0px
 }
 
-.modal-body input.focus,
-.modal-body input:focus {
+#kiralaModal input.focus,
+#kiralaModal input:focus {
     outline: 0;
     box-shadow: none !important
 }
 
-.modal-body .numbr.numbr.hover,
-.modal-body .numbr:hover {
+#kiralaModal .numbr.numbr.hover,
+#kiralaModal .numbr:hover {
     border-bottom: 1px solid rgb(0, 153, 255);
 }
 
-.modal-body .line2.hover,
-.modal-body .line2:hover {
+#kiralaModal .line2.hover,
+#kiralaModal .line2:hover {
     border-bottom: 1px solid rgb(0, 153, 255);
 }
 
@@ -86,7 +102,7 @@ font-size: 12px;
     margin-right: 10px
 }
 
-.modal-body .order {
+#kiralaModal .order {
     margin-top: 10px
 }
 

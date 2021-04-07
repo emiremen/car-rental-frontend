@@ -1,3 +1,7 @@
 li i {
-    margin-right: 10px;
+    margin-right: 5px;
+}
+.user-menu:hover{
+background-color: #2f3640;
+cursor: pointer;
 }

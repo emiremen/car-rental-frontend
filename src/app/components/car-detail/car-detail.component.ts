@@ -12,6 +12,12 @@ import { PaymentService } from 'src/app/services/payment.service';
 import { Payment } from 'src/app/models/payment';
 import { Banking } from 'src/app/models/banking';
 import { error } from 'selenium-webdriver';
+import { Brand } from 'src/app/models/brand';
+import { Color } from 'src/app/models/color';
+import { Car } from 'src/app/models/car';
+import { BrandService } from 'src/app/services/brand.service';
+import { ColorService } from 'src/app/services/color.service';
+import { CarImage } from 'src/app/models/carImage';
 
 @Component({
   selector: 'app-car-detail',
@@ -21,12 +27,16 @@ import { error } from 'selenium-webdriver';
 export class CarDetailComponent implements OnInit {
 
   carDto: CarDto;
+  carUpdateForm: FormGroup;
   rentalAddForm: FormGroup;
   paymentForm: FormGroup;
   bankingForm: FormGroup;
   savedCar: any;
   imgUploadSuccess?: boolean;
   imgFile: File[] = [];
+
+  allBrands: Brand[] = [];
+  allColors: Color[] = [];
 
   startDateForInput: string;
   endDateForInput: string;
@@ -40,16 +50,23 @@ export class CarDetailComponent implements OnInit {
 
   savedRental: Rental;
 
-  disablePaymentFormSubmit:boolean = false;
+  brandValueForForm:Brand;
+  colorValueForForm:Color;
 
-  constructor(private activatedRoute: ActivatedRoute,
+  disablePaymentFormSubmit: boolean = false;
+
+  constructor(
+    private activatedRoute: ActivatedRoute,
     private carService: CarService,
     private formBuilder: FormBuilder,
     private router: Router,
     private toastrService: ToastrService,
     private bankingService: BankingService,
     private rentalService: RentalService,
-    private paymentService: PaymentService) { }
+    private paymentService: PaymentService,
+    private carImageService: CarImageService,
+    private brandService: BrandService,
+    private colorService: ColorService) { }
 
   ngOnInit(): void {
 
@@ -72,12 +89,10 @@ export class CarDetailComponent implements OnInit {
     });
 
 
-
     this.createRentalForm();
     this.createPaymentForm();
     this.createBankingForm();
-
-
+    this.createCarUpdateForm();
     
   }
 
@@ -108,6 +123,18 @@ export class CarDetailComponent implements OnInit {
     });
   }
 
+  async createCarUpdateForm() {
+    this.carUpdateForm = await this.formBuilder.group({
+      brandId: [""],
+      colorId: ["", Validators.required],
+      modelYear: ["", Validators.required],
+      dailyPrice: ["", Validators.required],
+      description: [""]
+    });
+    await this.getAllBrands();
+    await this.getAllColors();
+  }
+
   kirala() {
     let start = new Date(new Intl.DateTimeFormat('en-Us', { year: 'numeric', month: 'numeric', day: 'numeric' }).format(new Date(this.startDateForInput)));
     let end = new Date(new Intl.DateTimeFormat('en-Us', { year: 'numeric', month: 'numeric', day: 'numeric' }).format(new Date(this.returnDateInput)));
@@ -131,38 +158,14 @@ export class CarDetailComponent implements OnInit {
 
               response.data.money = response.data.money - this.amount;
               this.bankingService.updateBanking(response.data).subscribe(response => {
-                if(response.success){
-                  this.disablePaymentFormSubmit = true;
-                this.toastrService.info("Bakiyeniz güncellendi.");
-
-
-              let rentalModel: Rental = Object.assign({}, this.rentalAddForm.value);
-              rentalModel.carId = this.carDto.carId;
-              this.rentalService.addRental(rentalModel).subscribe(response => {
                 if (response.success) {
-                  this.savedRental = response.data;
-                  this.toastrService.success(response.message);
+                  this.disablePaymentFormSubmit = true;
+                  this.toastrService.info("Bakiyeniz güncellendi.");
 
-                  let paymentModel: Payment = Object.assign({}, this.paymentForm.value);
-                  paymentModel.rentalId = this.savedRental.id;
-                  paymentModel.amount = this.amount;
-                  this.paymentService.addPayment(paymentModel).subscribe(response => {
-                    if (response.success) {
-                      this.toastrService.success(response.message);
-                    }
-                  },
-                    error => {
-                      console.error(error);
-                    });
+                  this.addRental();
+
                 }
-              },
-                error => {
-                  console.error(error);
-                });
-
-                
-              }
-            });
+              });
             }
           }
           else {
@@ -170,19 +173,125 @@ export class CarDetailComponent implements OnInit {
           }
         }
       },
-        error => {
-          console.error(error);
+        responseError => {
+          console.error(responseError);
         }
       )
     }
+  }
 
+  addPayment() {
+    let paymentModel: Payment = Object.assign({}, this.paymentForm.value);
+    paymentModel.rentalId = this.savedRental.id;
+    paymentModel.amount = this.amount;
+    this.paymentService.addPayment(paymentModel).subscribe(response => {
+      if (response.success) {
+        this.toastrService.success(response.message);
+      }
+    },
+      error => {
+        console.error(error);
+      });
+  }
 
+  addRental() {
+    let rentalModel: Rental = Object.assign({}, this.rentalAddForm.value);
+    rentalModel.carId = this.carDto.carId;
+    this.rentalService.addRental(rentalModel).subscribe(response => {
+      if (response.success) {
+        this.savedRental = response.data;
+        this.toastrService.success(response.message);
+
+        this.addPayment();
+      }
+    },
+      error => {
+        console.error(error);
+      });
+  }
+
+  updateCar() {
+    if (this.carUpdateForm.valid) {
+      let carModel: Car = Object.assign({}, this.carUpdateForm.value);
+      carModel.id = this.carDto.carId;
+      this.carService.updateCar(carModel).subscribe(response => {
+        console.log("Araç başarıyla güncellendi");
+        this.savedCar = response.data;
+        console.log(response)
+        if (this.imgFile.length > 0) {
+          this.addImage();
+        }
+
+      },
+        responseError => {
+          if (responseError.error.Errors.length > 0) {
+            for (let i = 0; i < responseError.error.Errors.length; i++) {
+              this.toastrService.error(responseError.error.Errors[i].ErrorMessage, "Hata");
+            }
+          }
+        }
+      );
+    }
+    else {
+      console.error("Formunuz eksik");
+    }
 
   }
 
+  addImage() {
+    if (this.imgFile) {
+      this.carImageService.addCarImages(this.carDto.carId, this.imgFile).subscribe(response => {
+        this.imgUploadSuccess = true;
+        console.warn(response)
+      },
+        error => {
+          this.imgUploadSuccess = false;
+          console.warn(error)
+        });
+    }
+    else {
+      console.log("Dosya boş")
+    }
+
+  }
+
+  onFileChange(event: any) {
+    this.imgFile = event.target.files
+    console.log(this.imgFile)
+  }
+
+  async getAllBrands() {
+    await this.brandService.getBrands().subscribe(response => {
+      this.allBrands = response.data;
+      for (let i = 0; i < this.allBrands.length; i++) {
+        if(this.allBrands[i].carBrand == this.carDto.brandName){
+          this.brandValueForForm =  this.allBrands[i];
+        }
+      }
+    });
+  }
+
+  async getAllColors() {
+    await this.colorService.getColors().subscribe(response => {
+      this.allColors = response.data;
+      for (let i = 0; i < this.allColors.length; i++) {
+        if(this.allColors[i].carColor == this.carDto.colorName){
+          this.colorValueForForm =  this.allColors[i];
+        }
+      }
+    });
+  }
+  
+
+  getToDeleteImage(toDeleteImage: CarImage) {
+     this.carImageService.deleteCarImage(toDeleteImage).subscribe(response => {
+       if(response.success){
+         this.toastrService.info("Resim silindi")
+       }
+     });
+  }
 
   cardNumberSplit() {
     document.getElementById("card-number").innerHTML = this.cardNumberInput.toString().replace(/\d{4}(?=.)/g, '$& ');
-
   }
 }

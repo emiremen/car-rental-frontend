@@ -1,0 +1,26 @@
+<body class="text-center">
+
+    <main class="form-signin">
+        <form [formGroup]="loginForm">
+            <img class="mb-4 d-none" src="/docs/5.0/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57">
+            <h1 class="h3 mb-3 fw-normal text-light">Giriş Yapın</h1>
+
+            <div class="form-floating">
+                <input formControlName="email" type="email" class="form-control" id="floatingInput" placeholder="mail@example.com">
+                <label for="floatingInput">E-posta</label>
+            </div>
+            <div class="form-floating">
+                <input formControlName="password" type="password" class="form-control" id="floatingPassword" placeholder="Parola">
+                <label for="floatingPassword">Parola</label>
+            </div>
+
+            <div class="checkbox mb-3 text-light">
+                <label>
+                    <input type="checkbox" value="remember-me"> Beni hatırla
+                </label>
+            </div>
+            <button class="w-100 btn btn-lg btn-primary" type="submit" (click)="login()">Giriş Yap</button>
+        </form>
+    </main>
+
+</body>

@@ -13,9 +13,9 @@
         </div>
 
         <div class="carousel-inner">
-          <div *ngFor="let img of carDto.carImage; let index = index;"
+          <div *ngFor="let images of carDto.carImage; let index = index;"
             [class]="(index == 0) ? 'carousel-item active' : 'carousel-item'">
-            <img src="https://localhost:44306/{{ img }}" class="d-block w-100" alt="..."
+            <img src="https://localhost:44306/{{ images.imagePath }}" class="d-block w-100" alt="..."
               style="height: 34rem;object-fit: cover;">
           </div>
         </div>
@@ -50,9 +50,11 @@
         <button type="button" class="btn btn-primary p-3" href="#kiralaModal" data-bs-toggle="modal">
           Aracı Kirala
         </button>
-
+        <button type="button" class="btn btn-success p-3" href="#guncelleModal" data-bs-toggle="modal">
+          Aracı Düzenle
+        </button>
       </div>
-      <div class="card-footer">
+      <div class="card-footer d-none">
         <small class="text-muted">Kiralanabilir.</small>
       </div>
     </div>
@@ -170,6 +172,75 @@
         <button type="button" class="btn btn-secondary" data-bs-target="#kiralaModal" data-bs-toggle="modal"
           data-bs-dismiss="modal" [disabled]="disablePaymentFormSubmit">Geri</button>
         <button type="button" class="btn btn-primary" (click)="ode()" [disabled]="disablePaymentFormSubmit">Öde</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Update Car Modal -->
+<div class="modal fade" id="guncelleModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Araç Düzenleme Formu</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Form -->
+        <form [formGroup]="carUpdateForm" *ngIf="brandValueForForm && colorValueForForm">
+          <div class="form-group mb-3">
+            <label for="brandId" class="form-label">Marka</label>
+
+            <select formControlName="brandId" [(ngModel)]="brandValueForForm.id" class="form-select" id="brandIdUpdateForm" [attr.aria-label]="brandValueForForm.carBrand">
+              <option [value]="brandValueForForm.id" disabled selected hidden>{{brandValueForForm.carBrand}}</option>
+              <option *ngFor="let brand of allBrands" value="{{brand.id}}">{{brand.carBrand}}</option>
+            </select>
+          </div>
+          <div class="form-group mb-3">
+            <label for="modelYear" class="form-label">Model Yılı</label>
+            <input type="number" formControlName="modelYear" class="form-control" id="modelYearUpdateForm" [(ngModel)]="carDto.modelYear"
+              placeholder="Model yılı giriniz.">
+          </div>
+          <div class="form-group mb-3">
+            <label for="colorId" class="form-label">Renk</label>
+            <select formControlName="colorId" [(ngModel)]="colorValueForForm.id" class="form-select" id="colorIdUpdateForm" [attr.aria-label]="colorValueForForm.carColor" required>
+              <option [value]="colorValueForForm.id" disabled selected hidden>{{colorValueForForm.carColor}}</option>
+              <option *ngFor="let color of allColors" value="{{color.id}}">{{color.carColor}}</option>
+            </select>
+          </div>
+          <div class="form-group mb-3">
+            <label for="dailyPrice" class="form-label">Ücret</label>
+            <input type="number" formControlName="dailyPrice" class="form-control" id="dailyPriceUpdateForm"  [(ngModel)]="carDto.dailyPrice"
+              placeholder="Günlük ücret giriniz.">
+          </div>
+          <div class="form-group mb-3">
+            <label for="description" class="form-label">Açıklama</label>
+            <textarea class="form-control" formControlName="description" id="descriptionUpdateForm" rows="3"  [(ngModel)]="carDto.description"
+              placeholder="Açıklama giriniz."></textarea>
+          </div>
+
+          <div class="form-group mb-3 mt-5">
+            <label for="file" class="form-label">Resim (opsiyonel)</label>
+            <input type="file" (change)="onFileChange($event)" class="form-control" id="fileUpdateForm"
+              placeholder="Renk giriniz." accept="image/*" multiple>
+          </div>
+          <div class="{{imgUploadSuccess ? 'alert alert-success' : 'alert alert-danger' }}"
+            [style]="imgUploadSuccess == undefined ? 'display:none' : 'display:block'" role="alert">
+            {{imgUploadSuccess ? "Resim başarıyla eklendi" : "Resim ekleme işlemi başarısız."}}
+          </div>
+          <div class="d-flex flex-wrap"  *ngIf="carDto">
+            <div *ngFor="let images of carDto.carImage; let index = index;">
+            <img src="https://localhost:44306/{{ images.imagePath }}" class="img-thumbnail" alt="..."style="height: 5rem; width:7rem; object-fit: cover;">
+            <i class="bi bi-x-circle-fill align-top text-danger shadow fs-4" (click)="getToDeleteImage(images)"></i>
+          </div>
+          </div>
+        </form>
+        <!-- Form -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+        <button type="button" class="btn btn-primary" (click)="updateCar()">Güncelle</button>
       </div>
     </div>
   </div>

@@ -46,4 +46,10 @@ export class CarService {
     car.colorId = (Number)(car.colorId)
     return this.httpClient.post<ListResponseModel<Car>>(this.apiUrl + "cars/addcar", car)
   }
+
+  updateCar(car:Car): Observable<ListResponseModel<Car>>{
+    car.brandId = (Number)(car.brandId)
+    car.colorId = (Number)(car.colorId)
+    return this.httpClient.post<ListResponseModel<Car>>(this.apiUrl + "cars/update", car)
+  }
 }

@@ -52,7 +52,7 @@ export class NavigationComponent implements OnInit {
 
   addImage() {
     if (this.imgFile) {
-      this.carImageService.addCarImages(this.savedCar, this.imgFile).subscribe(response => {
+      this.carImageService.addCarImages(this.savedCar.id, this.imgFile).subscribe(response => {
         this.imgUploadSuccess = true;
         console.warn(response)
       },
@@ -79,8 +79,13 @@ export class NavigationComponent implements OnInit {
         }
 
       },
-        error => {
-          console.log(error)
+        responseError => {
+          console.log(responseError)
+          if(responseError.error.Errors.length > 0){
+            for (let i = 0; i < responseError.error.Errors.length; i++) {
+              this.toastrService.error(responseError.error.Errors[i].ErrorMessage,"Hata");
+            }
+          }
         }
       );
     }
@@ -110,6 +115,43 @@ export class NavigationComponent implements OnInit {
     });
   }
 
+
+  updateBrand(id:any, brandName:any) {
+    let brandModel: Brand = {id: parseInt(id), carBrand: brandName };
+    this.brandService.updateBrand(brandModel).subscribe(response => {
+      if (response.success) {
+        this.toastrService.success("Marka başarılı bir şekilde güncellendi.", "Başarılı")
+      }
+    });
+  }
+  updateColor(id:any ,colorName:any) {
+    let colorModel: Color = {id: parseInt(id), carColor: colorName};
+    console.log(colorModel)
+    this.colorService.updateColor(colorModel).subscribe(response => {
+      if (response.success) {
+        this.toastrService.success("Renk başarılı bir şekilde güncellendi.", "Başarılı")
+      }
+    });
+  }
+
+
+  deleteBrand(id:any, brandName:any) {
+    let brandModel: Brand = {id: parseInt(id), carBrand: brandName };
+    this.brandService.deleteBrand(brandModel).subscribe(response => {
+      if (response.success) {
+        this.toastrService.success("Marka başarılı bir şekilde silindi.", "Başarılı")
+      }
+    });
+  }
+  deleteColor(id:any ,colorName:any) {
+    let colorModel: Color = {id: parseInt(id), carColor: colorName};
+    console.log(colorModel)
+    this.colorService.deleteColor(colorModel).subscribe(response => {
+      if (response.success) {
+        this.toastrService.success("Renk başarılı bir şekilde silindi.", "Başarılı")
+      }
+    });
+  }
   getAllBrands() {
     this.brandService.getBrands().subscribe(response => {
       this.allBrands = response.data;

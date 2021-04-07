@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Color } from '../models/color';
 import { ListResponseModel } from '../models/listResponseModel';
+import { SingleResponseModel } from '../models/singleResponseModel';
 
 @Injectable({
   providedIn: 'root'
@@ -17,8 +18,15 @@ export class ColorService {
     return this.httpClient.get<ListResponseModel<Color>>(this.apiUrl + "getall");
   }
 
-  addColor(carColor:string): Observable<ListResponseModel<Color>> {
-    return this.httpClient.post<ListResponseModel<Color>>(this.apiUrl + "add", {carColor});
+  addColor(carColor:string): Observable<SingleResponseModel<Color>> {
+    return this.httpClient.post<SingleResponseModel<Color>>(this.apiUrl + "add", {carColor});
   }
 
+  updateColor(carColor:Color): Observable<SingleResponseModel<Color>> {
+    return this.httpClient.post<SingleResponseModel<Color>>(this.apiUrl + "update", carColor);
+  }
+
+  deleteColor(carColor:Color): Observable<SingleResponseModel<Color>> {
+    return this.httpClient.post<SingleResponseModel<Color>>(this.apiUrl + "delete", carColor);
+  }
 }
