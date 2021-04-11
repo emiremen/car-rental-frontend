@@ -7,36 +7,34 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Item</a>
-        </li>
-        <li class="nav-item dropdown">
+        <li class="nav-item dropdown" *ngIf="isLogin">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
             aria-expanded="false">
             <i class="bi bi-plus-circle"></i>Yeni
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#addCarModal"><i class="fas fa-car"></i>Araç</a></li>
-            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#addBrandModal"><i class="fas fa-copyright"></i>Marka</a></li>
-            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#addColorModal"><i class="fas fa-palette"></i>Renk</a></li>
+            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#addCarModal"><i
+                  class="fas fa-car"></i>Araç</a></li>
+            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#addBrandModal"><i
+                  class="fas fa-copyright"></i>Marka</a></li>
+            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#addColorModal"><i
+                  class="fas fa-palette"></i>Renk</a></li>
             <li>
               <hr class="dropdown-divider">
             </li>
             <li><a class="dropdown-item" href="#">Something else here</a></li>
           </ul>
         </li>
-        <li class="nav-item dropdown">
+        <li class="nav-item dropdown" *ngIf="isLogin">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
             aria-expanded="false">
             <i class="bi bi-arrow-counterclockwise"></i>Düzenle
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <!-- <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#addCarModal"><i class="fas fa-car"></i>Araç</a></li> -->
-            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#updateBrandModal"><i class="fas fa-copyright"></i>Marka</a></li>
-            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#updateColorModal"><i class="fas fa-palette"></i>Renk</a></li>
+            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#updateBrandModal"><i
+                  class="fas fa-copyright"></i>Marka</a></li>
+            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#updateColorModal"><i
+                  class="fas fa-palette"></i>Renk</a></li>
             <li>
               <hr class="dropdown-divider">
             </li>
@@ -44,112 +42,240 @@
           </ul>
         </li>
       </ul>
-      <div class="d-flex position-absolute top-0 end-0 text-secondary px-3 user-select-none user-menu" routerLink="/login" style="height: 100%;">
-        <span class="align-self-center me-3 fw-bold">Login</span><i class="bi bi-person-circle fs-2"></i>
+      <div class="d-flex position-absolute top-0 end-0 text-secondary px-3 user-select-none user-menu"
+        style="height: 100%;">
+        <div class="d-flex" *ngIf="!isLogin; else userNameSpanBlock">
+          <span class="d-flex align-items-center mx-3 fw-bold" routerLink="/login">Login</span>
+          <span class="d-flex align-items-center mx-3 fw-bold" routerLink="/register">Register</span>
+        </div>
+        <ng-template #userNameSpanBlock><span *ngIf="user"
+            class="d-flex align-items-center mx-3 fw-bold">{{user.firstName + " " + user.lastName}}</span></ng-template>
+        <button class="btn dropdown-toggle px-3 rounded-0" type="button" data-bs-toggle="modal"
+          data-bs-target="#profileModal">
+          <i class="bi bi-person-circle fs-2"></i>
+        </button>
+        <ul *ngIf="isLogin" class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton2">
+          <li><a class="dropdown-item" href="#">Kullanıcı Ayarları</a></li>
+          <li><a class="dropdown-item" href="#">Yeni Kullanıcı Ekle</a></li>
+          <li><a class="dropdown-item" href="#">Admin Paneli</a></li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+          <li><a class="dropdown-item" (click)="signOut()">Çıkış</a></li>
+        </ul>
       </div>
     </div>
   </div>
 </nav>
 
+<div *ngIf="isLogin">
 
+  <!-- Profile Modal -->
+  <div class="modal fade" id="profileModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="profileModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <button type="button" class="btn-close position-absolute top-0 start-100 translate-middle bg-white border border-secondary" style="opacity: 1;right: 15px;" data-bs-dismiss="modal" aria-label="Close"></button>
+        
+        <div class="modal-body p-0">
 
-<!-- Add Car Modal -->
-<div class="modal fade" id="addCarModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-  aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="staticBackdropLabel">Araç Ekleme Formu</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <!-- Form -->
-        <form [formGroup]="carAddForm">
-          <div class="form-group mb-3">
-            <label for="brandId" class="form-label">Marka</label>
+          <div class="d-flex align-items-start">
+            <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+              <button class="border rounded-0 nav-link active" id="v-pills-profile-tab" data-bs-toggle="pill"
+                data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile"
+                aria-selected="false"><i class="bi bi-person-circle"></i></button>
+              <button class="border rounded-0 nav-link" id="v-pills-password-tab" data-bs-toggle="pill"
+                data-bs-target="#v-pills-password" type="button" role="tab" aria-controls="v-pills-password"
+                aria-selected="false"><i class="bi bi-key-fill"></i></button>
+              <button class="border rounded-0 nav-link" id="v-pills-settings-tab" data-bs-toggle="pill"
+                data-bs-target="#v-pills-settings" type="button" role="tab" aria-controls="v-pills-settings"
+                aria-selected="false"><i class="bi bi-gear-fill"></i></button>
+            </div>
+            <div class="tab-content py-3" id="v-pills-tabContent">
+              <div class="tab-pane fade show active" id="v-pills-profile" role="tabpanel"
+                aria-labelledby="v-pills-profile-tab">
 
-            <select formControlName="brandId" class="form-select" id="brandId" aria-label="Marka seçiniz." required>
-              <option value="" disabled selected hidden>Marka seçiniz.</option>
-              <option *ngFor="let brand of allBrands" value="{{brand.id}}">{{brand.carBrand}}</option>
-            </select>
-          </div>
-          <div class="form-group mb-3">
-            <label for="modelYear" class="form-label">Model Yılı</label>
-            <input type="number" formControlName="modelYear" class="form-control" id="modelYear"
-              placeholder="Model Yılı giriniz.">
-          </div>
-          <div class="form-group mb-3">
-            <label for="colorId" class="form-label">Renk</label>
-            <select formControlName="colorId" class="form-select" id="colorId" aria-label="Renk seçiniz." required>
-              <option value="" disabled selected hidden>Renk seçiniz.</option>
-              <option *ngFor="let color of allColors" value="{{color.id}}">{{color.carColor}}</option>
-            </select>
-          </div>
-          <div class="form-group mb-3">
-            <label for="dailyPrice" class="form-label">Ücret</label>
-            <input type="number" formControlName="dailyPrice" class="form-control" id="dailyPrice"
-              placeholder="Günlük ücret giriniz.">
-          </div>
-          <div class="form-group mb-3">
-            <label for="description" class="form-label">Açıklama</label>
-            <textarea class="form-control" formControlName="description" id="description" rows="3"
-              placeholder="Açıklama giriniz."></textarea>
+                <h4>Profil</h4>
+                <div class="card-body">
+                  <form [formGroup]="userUpdateForm" class="needs-validation" novalidate="">
+                    <div class="row g-3">
+                      <div class="col-sm-6">
+                        <label for="firstName" class="form-label">İsim</label>
+                        <input type="text" class="form-control" id="firstName" formControlName="firstName"
+                          placeholder="" value="" required="">
+                        <div class="invalid-feedback">
+                          Geçerli bir isim gereklidir.
+                        </div>
+                      </div>
+
+                      <div class="col-sm-6">
+                        <label for="lastName" class="form-label">Soyisim</label>
+                        <input type="text" class="form-control" id="lastName" formControlName="lastName"
+                          placeholder="" value="" required="">
+                        <div class="invalid-feedback">
+                          Geçerli bir soyisim gereklidir.
+                        </div>
+                      </div>
+
+                      <div class="col-12">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" formControlName="email"
+                          placeholder="" value="">
+                        <div class="invalid-feedback">
+                          Lütfen geçerli bir mail adresi giriniz.
+                        </div>
+                      </div>
+
+                    </div>
+                    <button type="button" class="btn btn-primary float-end my-4" (click)="updateProfile()">Güncelle</button>
+                  </form>
+                </div>
+
+              </div>
+              <div class="tab-pane fade" id="v-pills-password" role="tabpanel" aria-labelledby="v-pills-password-tab">
+
+                <h4>Parola</h4>
+                <div class="card-body row">
+                  <div class="form-group">
+                    <label for="password" class="form-label">Geçerli Parola</label>
+                    <input type="password" class="form-control" id="password">
+                    <div class="invalid-feedback">
+                      Lütfen geçerli bir parola giriniz.
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="password" class="form-label">Yeni Parola</label>
+                    <input type="password" class="form-control" id="passwordYeni">
+                    <div class="invalid-feedback">
+                      Lütfen geçerli bir parola giriniz.
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="password" class="form-label">Yeni Parola Tekrar</label>
+                    <input type="password" class="form-control" id="passwordTekrar">
+                    <div class="invalid-feedback">
+                      Lütfen geçerli bir parola giriniz.
+                    </div>
+                  </div>
+                  
+                </div>
+                <button type="button" class="btn btn-primary float-end my-4">Güncelle</button>
+              </div>
+              <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab">
+                ayarlar içerik</div>
+            </div>
           </div>
 
-          <div class="form-group mb-3 mt-5">
-            <label for="file" class="form-label">Resim (opsiyonel)</label>
-            <input type="file" (change)="onFileChange($event)" class="form-control" id="file"
-              placeholder="Renk giriniz." accept="image/*" multiple>
-          </div>
-          <div class="{{imgUploadSuccess ? 'alert alert-success' : 'alert alert-danger' }}"
-            [style]="imgUploadSuccess == undefined ? 'display:none' : 'display:block'" role="alert">
-            {{imgUploadSuccess ? "Resim başarıyla eklendi" : "Resim ekleme işlemi başarısız."}}
-          </div>
-        </form>
-        <!-- Form -->
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
-        <button type="button" class="btn btn-primary" (click)="addCar()">Ekle</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<!-- Add Brand Modal -->
-<div class="modal fade" id="addBrandModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-  aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="staticBackdropLabel">Marka Ekleme Formu</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+
+
+
+
+
+
+  <!-- Add Car Modal -->
+  <div class="modal fade" id="addCarModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Araç Ekleme Formu</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Form -->
+          <form [formGroup]="carAddForm">
+            <div class="form-group mb-3">
+              <label for="brandId" class="form-label">Marka</label>
+
+              <select formControlName="brandId" class="form-select" id="brandId" aria-label="Marka seçiniz." required>
+                <option value="" disabled selected hidden>Marka seçiniz.</option>
+                <option *ngFor="let brand of allBrands" value="{{brand.id}}">{{brand.carBrand}}</option>
+              </select>
+            </div>
+            <div class="form-group mb-3">
+              <label for="modelYear" class="form-label">Model Yılı</label>
+              <input type="number" formControlName="modelYear" class="form-control" id="modelYear"
+                placeholder="Model Yılı giriniz.">
+            </div>
+            <div class="form-group mb-3">
+              <label for="colorId" class="form-label">Renk</label>
+              <select formControlName="colorId" class="form-select" id="colorId" aria-label="Renk seçiniz." required>
+                <option value="" disabled selected hidden>Renk seçiniz.</option>
+                <option *ngFor="let color of allColors" value="{{color.id}}">{{color.carColor}}</option>
+              </select>
+            </div>
+            <div class="form-group mb-3">
+              <label for="dailyPrice" class="form-label">Ücret</label>
+              <input type="number" formControlName="dailyPrice" class="form-control" id="dailyPrice"
+                placeholder="Günlük ücret giriniz.">
+            </div>
+            <div class="form-group mb-3">
+              <label for="description" class="form-label">Açıklama</label>
+              <textarea class="form-control" formControlName="description" id="description" rows="3"
+                placeholder="Açıklama giriniz."></textarea>
+            </div>
+
+            <div class="form-group mb-3 mt-5">
+              <label for="file" class="form-label">Resim (opsiyonel)</label>
+              <input type="file" (change)="onFileChange($event)" class="form-control" id="file"
+                placeholder="Renk giriniz." accept="image/*" multiple>
+            </div>
+            <div class="{{imgUploadSuccess ? 'alert alert-success' : 'alert alert-danger' }}"
+              [style]="imgUploadSuccess == undefined ? 'display:none' : 'display:block'" role="alert">
+              {{imgUploadSuccess ? "Resim başarıyla eklendi" : "Resim ekleme işlemi başarısız."}}
+            </div>
+          </form>
+          <!-- Form -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+          <button type="button" class="btn btn-primary" (click)="addCar()">Ekle</button>
+        </div>
       </div>
-      <div class="modal-body">
+    </div>
+  </div>
+
+  <!-- Add Brand Modal -->
+  <div class="modal fade" id="addBrandModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Marka Ekleme Formu</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
           <div class="form-group mb-3">
             <label for="toAddBrandName" class="form-label">Marka</label>
-            <input #brandInput type="text" class="form-control" id="toAddBrandName"
-              placeholder="Marka giriniz.">
+            <input #brandInput type="text" class="form-control" id="toAddBrandName" placeholder="Marka giriniz.">
           </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
-        <button type="button" class="btn btn-primary" (click)="addBrand(brandInput.value)">Ekle</button>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+          <button type="button" class="btn btn-primary" (click)="addBrand(brandInput.value)">Ekle</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<!-- Update Brand Modal -->
-<div class="modal fade" id="updateBrandModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-  aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="staticBackdropLabel">Marka Güncelleme Formu</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
+  <!-- Update Brand Modal -->
+  <div class="modal fade" id="updateBrandModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Marka Güncelleme Formu</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
           <div class="form-group mb-3">
             <label for="brandId" class="form-label">Güncellenecek Marka</label>
             <select class="form-select" id="brandId" aria-label="Marka seçiniz." #brandIDSelect required>
@@ -162,68 +288,73 @@
             <input #brandUpdateInput type="text" class="form-control" id="toUpdateBrandName"
               placeholder="Marka giriniz.">
           </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
-        <button type="button" class="btn btn-danger" (click)="deleteBrand(brandIDSelect.value,brandIDSelect.value)">Sil</button>
-        <button type="button" class="btn btn-primary" (click)="updateBrand(brandIDSelect.value,brandUpdateInput.value)">Güncelle</button>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+          <button type="button" class="btn btn-danger"
+            (click)="deleteBrand(brandIDSelect.value,brandIDSelect.value)">Sil</button>
+          <button type="button" class="btn btn-primary"
+            (click)="updateBrand(brandIDSelect.value,brandUpdateInput.value)">Güncelle</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<!-- Add Color Modal -->
-<div class="modal fade" id="addColorModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-  aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="staticBackdropLabel">Renk Ekleme Formu</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
+  <!-- Add Color Modal -->
+  <div class="modal fade" id="addColorModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Renk Ekleme Formu</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
           <div class="form-group mb-3">
             <label for="toAddColorName" class="form-label">Renk</label>
-            <input #colorInput type="text" class="form-control" id="toAddColorName"
-              placeholder="Renk giriniz.">
+            <input #colorInput type="text" class="form-control" id="toAddColorName" placeholder="Renk giriniz.">
           </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
-        <button type="button" class="btn btn-primary" (click)="addColor(colorInput.value)">Ekle</button>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+          <button type="button" class="btn btn-primary" (click)="addColor(colorInput.value)">Ekle</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<!-- Update Color Modal -->
-<div class="modal fade" id="updateColorModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-  aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="staticBackdropLabel">Renk Güncelleme Formu</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-      <div class="form-group mb-3">
-        <label for="colorId" class="form-label">Güncellenecek Renk</label>
-        <select class="form-select" id="colorId" aria-label="Renk seçiniz." #colorIDSelect required>
-          <option value="" disabled selected hidden>Renk seçiniz.</option>
-          <option *ngFor="let color of allColors" value="{{color.id}}">{{color.carColor}}</option>
-        </select>
-      </div>
+  <!-- Update Color Modal -->
+  <div class="modal fade" id="updateColorModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Renk Güncelleme Formu</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group mb-3">
+            <label for="colorId" class="form-label">Güncellenecek Renk</label>
+            <select class="form-select" id="colorId" aria-label="Renk seçiniz." #colorIDSelect required>
+              <option value="" disabled selected hidden>Renk seçiniz.</option>
+              <option *ngFor="let color of allColors" value="{{color.id}}">{{color.carColor}}</option>
+            </select>
+          </div>
           <div class="form-group mb-3">
             <label for="toUpdateColorName" class="form-label">Yeni Renk Adı</label>
             <input #colorUpdateInput type="text" class="form-control" id="toUpdateColorName"
               placeholder="Renk giriniz.">
           </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
-        <button type="button" class="btn btn-danger" (click)="deleteColor(colorIDSelect.value,colorIDSelect.innerText)">Sil</button>
-        <button type="button" class="btn btn-primary" (click)="updateColor(colorIDSelect.value,colorUpdateInput.value)">Güncelle</button>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+          <button type="button" class="btn btn-danger"
+            (click)="deleteColor(colorIDSelect.value,colorIDSelect.innerText)">Sil</button>
+          <button type="button" class="btn btn-primary"
+            (click)="updateColor(colorIDSelect.value,colorUpdateInput.value)">Güncelle</button>
+        </div>
       </div>
     </div>
   </div>
+
 </div>

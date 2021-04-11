@@ -14,6 +14,9 @@ import { ToastrModule } from "ngx-toastr";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoginComponent } from './components/login/login.component';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
+import { RegisterComponent } from './components/register/register.component';
+import { ProfileComponent } from './components/profile/profile.component';
+import { CreditCardPipe } from './pipes/credit-card.pipe';
 
 @NgModule({
   declarations: [
@@ -23,7 +26,10 @@ import { AuthInterceptor } from './interceptors/auth.interceptor';
     ContentComponent,
     CarDetailComponent,
     FilterPipePipe,
-    LoginComponent
+    LoginComponent,
+    RegisterComponent,
+    ProfileComponent,
+    CreditCardPipe
   ],
   imports: [
     BrowserModule,

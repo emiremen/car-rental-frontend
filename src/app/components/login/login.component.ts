@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder } from "@angular/forms";
 import { ToastrService } from 'ngx-toastr';
+import { LoginModel } from 'src/app/models/loginModel';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
@@ -27,10 +28,12 @@ export class LoginComponent implements OnInit {
 
   login(){
     if(this.loginForm.valid){
-      let loginModel = Object.assign({}, this.loginForm.value);
+      let loginModel: LoginModel = Object.assign({}, this.loginForm.value);
+      localStorage.setItem("mail",loginModel.email);
       this.authService.login(loginModel).subscribe(response =>{
         this.toastrService.info(response.message);
-        localStorage.setItem("token",response.data.token)
+        localStorage.setItem("token",response.data.token);
+        
       },
       responseError=>{
         this.toastrService.error(responseError.error);

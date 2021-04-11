@@ -18,6 +18,12 @@ import { Car } from 'src/app/models/car';
 import { BrandService } from 'src/app/services/brand.service';
 import { ColorService } from 'src/app/services/color.service';
 import { CarImage } from 'src/app/models/carImage';
+import { CustomerService } from 'src/app/services/customer.service';
+import { UserBankCardService } from 'src/app/services/user-bank-card.service';
+import { UserBankCard } from 'src/app/models/userBankCard';
+import { User } from 'src/app/models/user';
+import { UserService } from 'src/app/services/user.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-car-detail',
@@ -31,6 +37,11 @@ export class CarDetailComponent implements OnInit {
   rentalAddForm: FormGroup;
   paymentForm: FormGroup;
   bankingForm: FormGroup;
+  banking: Banking;
+
+  userBankCards: UserBankCard[];
+  selectedBankCard: UserBankCard;
+
   savedCar: any;
   imgUploadSuccess?: boolean;
   imgFile: File[] = [];
@@ -50,10 +61,14 @@ export class CarDetailComponent implements OnInit {
 
   savedRental: Rental;
 
-  brandValueForForm:Brand;
-  colorValueForForm:Color;
+  brandValueForForm: Brand;
+  colorValueForForm: Color;
 
   disablePaymentFormSubmit: boolean = false;
+
+  saveCreditCard: boolean = false;
+
+  loggedInUser:User;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -66,35 +81,53 @@ export class CarDetailComponent implements OnInit {
     private paymentService: PaymentService,
     private carImageService: CarImageService,
     private brandService: BrandService,
-    private colorService: ColorService) { }
+    private colorService: ColorService,
+    private customerService: CustomerService,
+    private userBankCardService: UserBankCardService,
+    private userService: UserService,
+    private authService:AuthService) { }
 
   ngOnInit(): void {
 
     this.activatedRoute.params.subscribe(params => {
       if (params["carId"]) {
-        this.carService.getCarById(params["carId"]).subscribe((response) => {
-          this.carDto = response.data;
-          this.rentalService.getRentalByCarId(response.data.carId).subscribe(response => {
+        this.carService.getCarById(params["carId"]).subscribe( response => {
+         this.carDto = response.data;
+         this.rentalService.getRentalByCarId(response.data.carId).subscribe(response => {
             if (response.data) {
-              this.startDateForInput = new Intl.DateTimeFormat('fr-CA', { year: 'numeric', month: 'numeric', day: 'numeric' }).format(new Date(response.data.returnDate));
+              if (new Date(response.data.returnDate).getTime() > new Date().getTime()) {
+                this.startDateForInput = new Intl.DateTimeFormat('fr-CA', { year: 'numeric', month: 'numeric', day: 'numeric' }).format(new Date(response.data.returnDate));
+              }
+              else {
+                this.startDateForInput = new Intl.DateTimeFormat('fr-CA', { year: 'numeric', month: 'numeric', day: 'numeric' }).format(new Date());
+              }
             }
             else {
               this.startDateForInput = new Intl.DateTimeFormat('fr-CA', { year: 'numeric', month: 'numeric', day: 'numeric' }).format(new Date());
             }
-            let limitDate = new Date()
+            let limitDate = new Date();
             this.endDateForInput = new Intl.DateTimeFormat('fr-CA', { year: 'numeric', month: 'numeric', day: 'numeric' }).format(limitDate.setFullYear(limitDate.getFullYear() + 1));
           });
         })
       }
     });
 
-
+    this.getUser();
+    this.getUserBankCard();
     this.createRentalForm();
     this.createPaymentForm();
     this.createBankingForm();
     this.createCarUpdateForm();
-    
+
   }
+
+  getUser(){
+    this.userService.getUserByMail(this.authService.getAuthentication("mail")).subscribe(response => {
+      if(response.success){
+        this.loggedInUser = response.data;
+      }
+    });
+      }
 
   createRentalForm() {
     this.rentalAddForm = this.formBuilder.group({
@@ -116,23 +149,23 @@ export class CarDetailComponent implements OnInit {
 
   createBankingForm() {
     this.bankingForm = this.formBuilder.group({
-      nameOnCard: ["", Validators.required],
-      cardNumber: ["", Validators.required],
-      expiryDate: ["", Validators.required],
-      cvc: ["", Validators.required]
+      nameOnCard: [""],
+      cardNumber: [""],
+      expiryDate: [""],
+      cvc: [""]
     });
   }
 
-  async createCarUpdateForm() {
-    this.carUpdateForm = await this.formBuilder.group({
+   createCarUpdateForm() {
+    this.carUpdateForm = this.formBuilder.group({
       brandId: [""],
       colorId: ["", Validators.required],
       modelYear: ["", Validators.required],
       dailyPrice: ["", Validators.required],
       description: [""]
     });
-    await this.getAllBrands();
-    await this.getAllColors();
+    this.getAllBrands();
+    this.getAllColors();
   }
 
   kirala() {
@@ -145,39 +178,92 @@ export class CarDetailComponent implements OnInit {
     this.toastrService.info(diffDays + " gün için ödenecek tutar. ", this.amount + "₺");
   }
 
+  getselectedCreditCard(card: UserBankCard) {
+    this.selectedBankCard = card;
+  }
+
+  deleteSavedCreditCard(bankCard:UserBankCard){
+    this.userBankCardService.deleteUserBankCard(bankCard).subscribe(response=>{
+      if(response.success){
+        this.toastrService.info("Kartınız başarılı bir şekilde silindi.");
+      }
+    })
+  }
+
   ode() {
 
-    if (this.bankingForm.valid) {
-      let bankingModel: Banking = Object.assign({}, this.bankingForm.value);
-      bankingModel.cardNumber = bankingModel.cardNumber.toString();
-      bankingModel.cvc = bankingModel.cvc.toString();
+      let bankingModel: any;
+      if (this.selectedBankCard) {
+        bankingModel = this.selectedBankCard;
+      }
+      else {
+        bankingModel = Object.assign({}, this.bankingForm.value);
+        bankingModel.cardNumber = bankingModel.cardNumber.toString();
+        bankingModel.cvc = bankingModel.cvc.toString();
+
+      }
+
+      console.log(this.selectedBankCard)
       this.bankingService.getBanking(bankingModel).subscribe(response => {
+        console.log(response)
         if (response.success) {
-          if (response.data.money >= this.amount) {
-            if (this.rentalAddForm.valid && this.paymentForm.valid) {
+          this.banking = response.data;
 
-              response.data.money = response.data.money - this.amount;
-              this.bankingService.updateBanking(response.data).subscribe(response => {
-                if (response.success) {
-                  this.disablePaymentFormSubmit = true;
-                  this.toastrService.info("Bakiyeniz güncellendi.");
+          if (response.data.customerFindex >= this.carDto.carFindex) {
+            if (response.data.money >= this.amount) {
+              if (this.rentalAddForm.valid && this.paymentForm.valid) {
 
-                  this.addRental();
+                response.data.money = response.data.money - this.amount;
+                this.bankingService.updateBanking(response.data).subscribe(response => {
+                  if (response.success) {
+                    this.disablePaymentFormSubmit = true;
+                    this.toastrService.info("Bakiyeniz güncellendi.");
 
-                }
-              });
+                    this.addRental();
+                    if (this.saveCreditCard) {
+                      this.addCreditCard();
+                    }
+
+                  }
+                });
+              }
+            }
+            else {
+              this.toastrService.error("Yetersiz bakiye.")
             }
           }
           else {
-            this.toastrService.error("Yetersiz bakiye.")
+            this.toastrService.error("Findex puanınız yetersiz.");
           }
+        }
+        else{
+          this.toastrService.error("Kart bilgisi geçerli değil.")
         }
       },
         responseError => {
+          this.toastrService.error("Kart bilgisi geçerli değil.")
           console.error(responseError);
         }
       )
-    }
+    
+  }
+
+  getUserBankCard() {
+    this.userBankCardService.getUserBankCard(2).subscribe(response => {
+      if (response.success) {
+        this.userBankCards = response.data;
+      }
+    })
+  }
+
+  addCreditCard() {
+    console.log("addCreditCard motodu calisti")
+    this.userBankCardService.addUserBankCard(this.banking).subscribe(response => {
+      console.log("servise gitti")
+      if (response.success) {
+        console.log("Card Added to DB")
+      }
+    });
   }
 
   addPayment() {
@@ -259,36 +345,36 @@ export class CarDetailComponent implements OnInit {
     this.imgFile = event.target.files
     console.log(this.imgFile)
   }
-
-  async getAllBrands() {
-    await this.brandService.getBrands().subscribe(response => {
+//################################################
+   getAllBrands() {
+     this.brandService.getBrands().subscribe( response => {
       this.allBrands = response.data;
       for (let i = 0; i < this.allBrands.length; i++) {
-        if(this.allBrands[i].carBrand == this.carDto.brandName){
-          this.brandValueForForm =  this.allBrands[i];
+        if (this.allBrands[i].carBrand == this.carDto.brandName) {
+          this.brandValueForForm = this.allBrands[i];
         }
       }
     });
   }
 
-  async getAllColors() {
-    await this.colorService.getColors().subscribe(response => {
+   getAllColors() {
+    this.colorService.getColors().subscribe(response => {
       this.allColors = response.data;
       for (let i = 0; i < this.allColors.length; i++) {
-        if(this.allColors[i].carColor == this.carDto.colorName){
-          this.colorValueForForm =  this.allColors[i];
+        if (this.allColors[i].carColor == this.carDto.colorName) {
+          this.colorValueForForm = this.allColors[i];
         }
       }
     });
   }
-  
+
 
   getToDeleteImage(toDeleteImage: CarImage) {
-     this.carImageService.deleteCarImage(toDeleteImage).subscribe(response => {
-       if(response.success){
-         this.toastrService.info("Resim silindi")
-       }
-     });
+    this.carImageService.deleteCarImage(toDeleteImage).subscribe(response => {
+      if (response.success) {
+        this.toastrService.info("Resim silindi")
+      }
+    });
   }
 
   cardNumberSplit() {

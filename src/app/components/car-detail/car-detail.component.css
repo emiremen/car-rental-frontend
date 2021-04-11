@@ -26,93 +26,83 @@ select:required:invalid {
   
   /* Payment Modal */
 
-.card-user{
-font-size: 12px;
-  }
-  #kiralaModal .container {
-    margin-top: 40px;
-    margin-bottom: 40px
-}
-
-#kiralaModal img {
-    width: 100%
-}
-
-#kiralaModal .card-title {
-    justify-content: space-between;
-    margin-top: 25px
-}
-
-.register {
-    font-size: 10px;
-    position: relative;
-    bottom: 5px
-}
-
-
-#kiralaModal input {
-    border: none;
-    padding-left: 4px;
-    background-color: #f7f1f1;
-    font-size: 15px
-}
-
-#kiralaModal  .card-body {
-    background-color: #f7f1f1
-}
-
-#kiralaModal .footer {
-    background-color: #00BCD4;
-    color: white
-}
-
-#kiralaModal .footer:hover {
-    cursor: pointer;
-    background-color: #0097A7
-}
-
-.numbr {
-    border-bottom: 1px solid #c1bcbc;
-    padding-bottom: 8px
-}
-
-.line2 {
-    border-bottom: 1px solid #c1bcbc;
-    padding-bottom: 8px;
-    padding-left: 0px
-}
-
-#kiralaModal input.focus,
-#kiralaModal input:focus {
-    outline: 0;
-    box-shadow: none !important
-}
-
-#kiralaModal .numbr.numbr.hover,
-#kiralaModal .numbr:hover {
-    border-bottom: 1px solid rgb(0, 153, 255);
-}
-
-#kiralaModal .line2.hover,
-#kiralaModal .line2:hover {
-    border-bottom: 1px solid rgb(0, 153, 255);
-}
-
-.fa-lock {
-    margin-right: 10px
-}
-
-#kiralaModal .order {
-    margin-top: 10px
-}
-
-
-
-
-
-
-
-
-.credit-card{
-  font-family: "Orbitron";
-}
+  .card-user{
+    font-size: 12px;
+      }
+    
+      .container {
+        margin-top: 40px;
+        margin-bottom: 40px
+    }
+    
+    #odeModal img {
+        width: 100%
+    }
+    
+    #odeModal .card-title {
+        justify-content: space-between;
+        margin-top: 25px
+    }
+    
+    .register {
+        font-size: 10px;
+        position: relative;
+        bottom: 5px
+    }
+    
+    
+    #odeModal input {
+        border: none;
+        padding-left: 4px;
+        background-color: #f7f1f1;
+        font-size: 15px
+    }
+    
+    
+    #odeModal .footer {
+        background-color: #00BCD4;
+        color: white
+    }
+    
+    #odeModal .footer:hover {
+        cursor: pointer;
+        background-color: #0097A7
+    }
+    
+    .numbr {
+        border-bottom: 1px solid #c1bcbc;
+        padding-bottom: 8px
+    }
+    
+    .line2 {
+        border-bottom: 1px solid #c1bcbc;
+        padding-bottom: 8px;
+        padding-left: 0px
+    }
+    
+    #odeModal input:focus {
+        outline: 0;
+        box-shadow: none !important
+    }
+    
+    .numbr:hover {
+        border-bottom: 1px solid aqua
+    }
+    
+    .line2.hover,
+    .line2:hover {
+        border-bottom: 1px solid aqua
+    }
+    
+    .fa-lock {
+        margin-right: 10px
+    }
+    
+    .order {
+        margin-top: 10px
+    }
+    
+    
+    .credit-card{
+      font-family: "Orbitron";
+    }

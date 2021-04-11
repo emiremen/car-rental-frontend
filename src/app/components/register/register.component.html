@@ -1,0 +1,47 @@
+<main class="text-light container row justify-content-md-center">
+    <div class="col-md-7">
+
+        <h4 class="mb-5 text-center">Kayıt Formu</h4>
+        
+        <form [formGroup]="registerForm" class="needs-validation" novalidate="">
+            <div class="row g-3">
+                <div class="col-sm-6">
+                    <label for="firstName" class="form-label">İsim</label>
+                    <input type="text" class="form-control" id="firstName" formControlName="firstName" placeholder="" value="" required="">
+                    <div class="invalid-feedback">
+                        Geçerli bir isim gereklidir.
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <label for="lastName" class="form-label">Soyisim</label>
+                    <input type="text" class="form-control" id="lastName" formControlName="lastName" placeholder="" value="" required="">
+                    <div class="invalid-feedback">
+                        Geçerli bir soyisim gereklidir.
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" formControlName="email" placeholder="mail@example.com">
+                    <div class="invalid-feedback">
+                        Lütfen geçerli bir mail adresi giriniz.
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <label for="password" class="form-label">Parola</label>
+                    <input type="password" class="form-control" id="password" formControlName="password" placeholder="">
+                    <div class="invalid-feedback">
+                        Lütfen geçerli bir parola giriniz.
+                    </div>
+                </div>
+
+
+                <hr class="my-4">
+
+                <button class="w-100 btn btn-primary btn-lg" (click)="register()">Kayıt Ol</button>
+            </div>
+        </form>
+    </div>
+</main>

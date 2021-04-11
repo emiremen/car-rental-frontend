@@ -8,4 +8,5 @@ export interface CarDto {
     carImage:CarImage[];
     dailyPrice: number;
     description: string;
+    carFindex: number;
 }

@@ -76,8 +76,8 @@
         <form [formGroup]="rentalAddForm" *ngIf="carDto">
           <div class="form-group mb-3">
             <label for="customer" class="form-label">Müşteri</label>
-            <input type="text" class="form-control bg-white border-0 pe-none" id="customer"
-              placeholder="-musteri adi-" readonly>
+            <input *ngIf="loggedInUser" type="text" class="form-control bg-white border-0 pe-none" id="customer" placeholder="{{loggedInUser.firstName + ' ' + loggedInUser.lastName}}"
+              readonly>
 
           </div>
           <div class="form-group mb-3">
@@ -121,8 +121,17 @@
         <h5 class="modal-title" id="odeModalLabel">Araç Kiralama Formu</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
+      
       <div class="modal-body">
-
+        <div class="card" *ngFor="let card of userBankCards">
+          <div class="d-flex bd-highlight" *ngIf="userBankCards">
+            <div class="p-2 bd-highlight align-self-center">
+              <input type="radio" name="card" (change)="getselectedCreditCard(card)" value="{{card}}"><i class="ms-3 col-1 fas fa-credit-card text-muted"></i>
+            </div>
+            <div class="p-2 flex-grow-1 bd-highlight align-self-center"><span>{{card.cardNumber | creditCard: card.cardNumber}}</span></div>
+            <div class="p-2 bd-highlight align-self-center"><button class="btn btn-danger py-1 m-0" (click)="deleteSavedCreditCard(card)">Kartı Sil</button></div>
+          </div>
+        </div>
         <div class="card">
           <div class="card-title d-flex px-4">
             <p class="item text-muted">{{carDto.brandName}}</p>
@@ -154,15 +163,16 @@
               <div class="numbr mb-3"> <i class=" col-1 fas fa-credit-card text-muted p-0"></i>
                 <input type="number" id="cardNumber" name="cardNumber" formControlName="cardNumber" pattern="[0-9]{16}"
                   [(ngModel)]="cardNumberInput" onKeyPress="if(this.value.length>=16) return false;" class="col-10 p-0"
-                  placeholder="Card Number" (input)="cardNumberSplit()">
+                  placeholder="Card Number" (input)="cardNumberSplit()" required>
               </div>
               <div class="line2 col-lg-12 col-12 mb-4 d-inline-flex justify-content-center"> <i
                   class="col-1 far fa-calendar-minus text-muted p-0"></i>
                 <input class="cal col-5 p-0" type="text" name="expiryDate" formControlName="expiryDate"
-                  [(ngModel)]="cardExpiryDateInput" placeholder="MM/YY" maxlength="5">
+                  [(ngModel)]="cardExpiryDateInput" placeholder="MM/YY" maxlength="5" required>
                 <i class="col-1 fas fa-lock text-muted"></i> <input class="cvc col-5 p-0" type="number" name="cvc"
-                  onKeyPress="if(this.value.length>=4) return false;" formControlName="cvc" placeholder="CVC">
+                  onKeyPress="if(this.value.length>=4) return false;" formControlName="cvc" placeholder="CVC" required>
               </div>
+              <input [(ngModel)]="saveCreditCard" [ngModelOptions]="{standalone: true}" type="checkbox" name="saveCreditCard" id="saveCreditCard"> Sonraki işlemler için kartımı kaydet.
             </form>
           </div>
         </div>
@@ -192,32 +202,34 @@
           <div class="form-group mb-3">
             <label for="brandId" class="form-label">Marka</label>
 
-            <select formControlName="brandId" [(ngModel)]="brandValueForForm.id" class="form-select" id="brandIdUpdateForm" [attr.aria-label]="brandValueForForm.carBrand">
+            <select formControlName="brandId" [(ngModel)]="brandValueForForm.id" class="form-select"
+              id="brandIdUpdateForm" [attr.aria-label]="brandValueForForm.carBrand">
               <option [value]="brandValueForForm.id" disabled selected hidden>{{brandValueForForm.carBrand}}</option>
               <option *ngFor="let brand of allBrands" value="{{brand.id}}">{{brand.carBrand}}</option>
             </select>
           </div>
           <div class="form-group mb-3">
             <label for="modelYear" class="form-label">Model Yılı</label>
-            <input type="number" formControlName="modelYear" class="form-control" id="modelYearUpdateForm" [(ngModel)]="carDto.modelYear"
-              placeholder="Model yılı giriniz.">
+            <input type="number" formControlName="modelYear" class="form-control" id="modelYearUpdateForm"
+              [(ngModel)]="carDto.modelYear" placeholder="Model yılı giriniz.">
           </div>
           <div class="form-group mb-3">
             <label for="colorId" class="form-label">Renk</label>
-            <select formControlName="colorId" [(ngModel)]="colorValueForForm.id" class="form-select" id="colorIdUpdateForm" [attr.aria-label]="colorValueForForm.carColor" required>
+            <select formControlName="colorId" [(ngModel)]="colorValueForForm.id" class="form-select"
+              id="colorIdUpdateForm" [attr.aria-label]="colorValueForForm.carColor" required>
               <option [value]="colorValueForForm.id" disabled selected hidden>{{colorValueForForm.carColor}}</option>
               <option *ngFor="let color of allColors" value="{{color.id}}">{{color.carColor}}</option>
             </select>
           </div>
           <div class="form-group mb-3">
             <label for="dailyPrice" class="form-label">Ücret</label>
-            <input type="number" formControlName="dailyPrice" class="form-control" id="dailyPriceUpdateForm"  [(ngModel)]="carDto.dailyPrice"
-              placeholder="Günlük ücret giriniz.">
+            <input type="number" formControlName="dailyPrice" class="form-control" id="dailyPriceUpdateForm"
+              [(ngModel)]="carDto.dailyPrice" placeholder="Günlük ücret giriniz.">
           </div>
           <div class="form-group mb-3">
             <label for="description" class="form-label">Açıklama</label>
-            <textarea class="form-control" formControlName="description" id="descriptionUpdateForm" rows="3"  [(ngModel)]="carDto.description"
-              placeholder="Açıklama giriniz."></textarea>
+            <textarea class="form-control" formControlName="description" id="descriptionUpdateForm" rows="3"
+              [(ngModel)]="carDto.description" placeholder="Açıklama giriniz."></textarea>
           </div>
 
           <div class="form-group mb-3 mt-5">
@@ -229,11 +241,12 @@
             [style]="imgUploadSuccess == undefined ? 'display:none' : 'display:block'" role="alert">
             {{imgUploadSuccess ? "Resim başarıyla eklendi" : "Resim ekleme işlemi başarısız."}}
           </div>
-          <div class="d-flex flex-wrap"  *ngIf="carDto">
+          <div class="d-flex flex-wrap" *ngIf="carDto">
             <div *ngFor="let images of carDto.carImage; let index = index;">
-            <img src="https://localhost:44306/{{ images.imagePath }}" class="img-thumbnail" alt="..."style="height: 5rem; width:7rem; object-fit: cover;">
-            <i class="bi bi-x-circle-fill align-top text-danger shadow fs-4" (click)="getToDeleteImage(images)"></i>
-          </div>
+              <img src="https://localhost:44306/{{ images.imagePath }}" class="img-thumbnail" alt="..."
+                style="height: 5rem; width:7rem; object-fit: cover;">
+              <i class="bi bi-x-circle-fill align-top text-danger shadow fs-4" (click)="getToDeleteImage(images)"></i>
+            </div>
           </div>
         </form>
         <!-- Form -->

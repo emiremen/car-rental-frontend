@@ -3,10 +3,13 @@ import { FormGroup, FormBuilder, FormControl, Validators } from "@angular/forms"
 import { ToastrService } from 'ngx-toastr';
 import { Brand } from 'src/app/models/brand';
 import { Color } from 'src/app/models/color';
+import { User } from 'src/app/models/user';
+import { AuthService } from 'src/app/services/auth.service';
 import { BrandService } from 'src/app/services/brand.service';
 import { CarService } from 'src/app/services/car.service';
 import { CarImageService } from 'src/app/services/carImage.service';
 import { ColorService } from 'src/app/services/color.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-navigation',
@@ -16,6 +19,8 @@ import { ColorService } from 'src/app/services/color.service';
 export class NavigationComponent implements OnInit {
 
   carAddForm: FormGroup;
+  userUpdateForm:FormGroup;
+
   savedCar: any;
   imgUploadSuccess: boolean;
   imgFile: File[] = [];
@@ -25,6 +30,9 @@ export class NavigationComponent implements OnInit {
 
   allBrands: Brand[] = [];
   allColors: Color[] = [];
+  user:User;
+
+  isLogin:boolean = false;
 
   constructor(
     private carService: CarService,
@@ -32,12 +40,28 @@ export class NavigationComponent implements OnInit {
     private carImageService: CarImageService,
     private brandService: BrandService,
     private colorService: ColorService,
-    private toastrService: ToastrService) { }
+    private toastrService: ToastrService,
+    private authService: AuthService,
+    private userService: UserService) { }
 
   ngOnInit(): void {
     this.getAllBrands();
     this.getAllColors();
+    this.getUser();
+    this.createUserUpdateForm();
     this.createCarProduct();
+    
+
+    this.isLogin = this.authService.isAuthenticated("token") ? true : false;
+  }
+
+  getUser(){
+this.userService.getUserByMail(this.authService.getAuthentication("mail")).subscribe(response => {
+  if(response.success){
+    this.user = response.data;
+    this.userUpdateForm.patchValue(this.user)
+  }
+});
   }
 
   createCarProduct() {
@@ -164,4 +188,31 @@ export class NavigationComponent implements OnInit {
     });
   }
 
+  signOut(){
+    localStorage.removeItem("token");
+    localStorage.removeItem("mail");
+  }
+
+  
+  createUserUpdateForm() {
+    this.userUpdateForm = this.formBuilder.group({
+      firstName: [],
+      lastName: [],
+      email: []
+    })
+  }
+
+  updateProfile(){
+      let userModel:User = this.user;
+      console.log(userModel)
+      userModel.firstName = this.userUpdateForm.get("firstName").value;
+      userModel.lastName = this.userUpdateForm.get("lastName").value;
+      userModel.email = this.userUpdateForm.get("email").value;
+      console.log(userModel)
+      this.userService.update(userModel).subscribe(response => {
+      console.log(response)
+    })
+    
+    
+  }
 }

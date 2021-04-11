@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { LoginModel } from '../models/loginModel';
+import { RegisterModel } from '../models/registerModel';
 import { SingleResponseModel } from '../models/singleResponseModel';
 import { TokenModel } from '../models/tokenModal';
 
@@ -18,11 +19,26 @@ export class AuthService {
     return this.httpClient.post<SingleResponseModel<TokenModel>>(this.apiUrl + "login", loginModel);
   }
 
-  isAuthenticated(){
-    if(localStorage.getItem("token")){
+  register(registerModel:RegisterModel):Observable<SingleResponseModel<TokenModel>>{
+    return this.httpClient.post<SingleResponseModel<TokenModel>>(this.apiUrl + "register", registerModel);
+  }
+
+  isAuthenticated(key:string){
+    if(localStorage.getItem(key)){
       return true;
     }
     return false;
+  }
+
+  setAuthentication(key:string, value:string){
+    localStorage.setItem(key, value);
+  }
+
+  getAuthentication(key:string){
+    return localStorage.getItem(key);
+  }
+  deleteAuthentication(key:string){
+    localStorage.removeItem(key);
   }
 
 }
