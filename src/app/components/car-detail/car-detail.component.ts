@@ -24,6 +24,7 @@ import { UserBankCard } from 'src/app/models/userBankCard';
 import { User } from 'src/app/models/user';
 import { UserService } from 'src/app/services/user.service';
 import { AuthService } from 'src/app/services/auth.service';
+import { concat } from 'rxjs';
 
 @Component({
   selector: 'app-car-detail',
@@ -92,6 +93,8 @@ export class CarDetailComponent implements OnInit {
     this.activatedRoute.params.subscribe(params => {
       if (params["carId"]) {
         this.carService.getCarById(params["carId"]).subscribe( response => {
+          this.getAllBrands();
+           this.getAllColors();
          this.carDto = response.data;
          this.rentalService.getRentalByCarId(response.data.carId).subscribe(response => {
             if (response.data) {
@@ -113,6 +116,7 @@ export class CarDetailComponent implements OnInit {
     });
 
     this.getUser();
+    
     this.getUserBankCard();
     this.createRentalForm();
     this.createPaymentForm();
@@ -164,8 +168,6 @@ export class CarDetailComponent implements OnInit {
       dailyPrice: ["", Validators.required],
       description: [""]
     });
-    this.getAllBrands();
-    this.getAllColors();
   }
 
   kirala() {
@@ -349,6 +351,7 @@ export class CarDetailComponent implements OnInit {
    getAllBrands() {
      this.brandService.getBrands().subscribe( response => {
       this.allBrands = response.data;
+      console.log(this.carDto)
       for (let i = 0; i < this.allBrands.length; i++) {
         if (this.allBrands[i].carBrand == this.carDto.brandName) {
           this.brandValueForForm = this.allBrands[i];
