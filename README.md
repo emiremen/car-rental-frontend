@@ -26,7 +26,7 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
 
-#### Screenshot
+#### Screenshots
 
 
 ![screenshots](https://github.com/emiremen/car-rental-frontend/blob/main/screenshots/Ekran%20g%C3%B6r%C3%BCnt%C3%BCs%C3%BC%202021-04-11%20231806.jpg)
@@ -45,4 +45,6 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 ![screenshots](https://github.com/emiremen/car-rental-frontend/blob/main/screenshots/Ekran%20g%C3%B6r%C3%BCnt%C3%BCs%C3%BC%202021-04-11%20235008.jpg)
 
+![screenshots](https://github.com/emiremen/car-rental-frontend/blob/main/screenshots/Ekran%20g%C3%B6r%C3%BCnt%C3%BCs%C3%BC%202021-04-12%20011414.jpg)
 
+![screenshots](https://github.com/emiremen/car-rental-frontend/blob/main/screenshots/Ekran%20g%C3%B6r%C3%BCnt%C3%BCs%C3%BC%202021-04-12%20011611.jpg)
