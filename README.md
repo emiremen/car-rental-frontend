@@ -27,4 +27,22 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
 
 #### Screenshot
-![screenshots](https://github.com/emiremen/car-rental/blob/main/screenshots/localhost_4200_.png)
+
+
+![screenshots](https://github.com/emiremen/car-rental-frontend/blob/main/screenshots/Ekran%20g%C3%B6r%C3%BCnt%C3%BCs%C3%BC%202021-04-11%20231806.jpg)
+
+![screenshots](https://github.com/emiremen/car-rental-frontend/blob/main/screenshots/Ekran%20g%C3%B6r%C3%BCnt%C3%BCs%C3%BC%202021-04-11%20231857.jpg)
+
+![screenshots](https://github.com/emiremen/car-rental-frontend/blob/main/screenshots/Ekran%20g%C3%B6r%C3%BCnt%C3%BCs%C3%BC%202021-04-11%20232218.jpg)
+
+![screenshots](https://github.com/emiremen/car-rental-frontend/blob/main/screenshots/Ekran%20g%C3%B6r%C3%BCnt%C3%BCs%C3%BC%202021-04-11%20233457.jpg)
+
+![screenshots](https://github.com/emiremen/car-rental-frontend/blob/main/screenshots/Ekran%20g%C3%B6r%C3%BCnt%C3%BCs%C3%BC%202021-04-11%20233608.jpg)
+
+![screenshots](https://github.com/emiremen/car-rental-frontend/blob/main/screenshots/Ekran%20g%C3%B6r%C3%BCnt%C3%BCs%C3%BC%202021-04-11%20234226.jpg)
+
+![screenshots](https://github.com/emiremen/car-rental-frontend/blob/main/screenshots/Ekran%20g%C3%B6r%C3%BCnt%C3%BCs%C3%BC%202021-04-11%20235052.jpg)
+
+![screenshots](https://github.com/emiremen/car-rental-frontend/blob/main/screenshots/Ekran%20g%C3%B6r%C3%BCnt%C3%BCs%C3%BC%202021-04-11%20235008.jpg)
+
+
