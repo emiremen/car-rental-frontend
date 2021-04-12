@@ -55,6 +55,19 @@ export class NavigationComponent implements OnInit {
     this.isLogin = this.authService.isAuthenticated("token") ? true : false;
   }
 
+  changePassword(oldPass:string, newPass:string, newPassTekrar:string){
+    if(newPass != newPassTekrar) {
+      this.toastrService.error('Yeni şifreler uyuşmuyor.')
+    }else{
+      let changePassModel = {userId:this.user.id, oldPassword: oldPass, newPassword: newPass};
+      this.authService.changePassword(changePassModel).subscribe(response => {
+        if(response.success){
+          this.toastrService.success("Şifre değiştirme başarılı.")
+        }
+      })
+    }
+  }
+
   getUser(){
 this.userService.getUserByMail(this.authService.getAuthentication("mail")).subscribe(response => {
   if(response.success){

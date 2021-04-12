@@ -135,7 +135,7 @@
                 <div class="card-body row">
                   <div class="form-group">
                     <label for="password" class="form-label">Geçerli Parola</label>
-                    <input type="password" class="form-control" id="password">
+                    <input type="password" class="form-control" id="password" #password>
                     <div class="invalid-feedback">
                       Lütfen geçerli bir parola giriniz.
                     </div>
@@ -143,7 +143,7 @@
 
                   <div class="form-group">
                     <label for="password" class="form-label">Yeni Parola</label>
-                    <input type="password" class="form-control" id="passwordYeni">
+                    <input type="password" class="form-control" id="passwordYeni" #passwordYeni>
                     <div class="invalid-feedback">
                       Lütfen geçerli bir parola giriniz.
                     </div>
@@ -151,14 +151,14 @@
 
                   <div class="form-group">
                     <label for="password" class="form-label">Yeni Parola Tekrar</label>
-                    <input type="password" class="form-control" id="passwordTekrar">
+                    <input type="password" class="form-control" id="passwordTekrar" #passwordTekrar>
                     <div class="invalid-feedback">
                       Lütfen geçerli bir parola giriniz.
                     </div>
                   </div>
                   
                 </div>
-                <button type="button" class="btn btn-primary float-end my-4">Güncelle</button>
+                <button type="button" class="btn btn-primary float-end my-4" (click)="changePassword(password.value, passwordYeni.value, passwordTekrar.value)">Güncelle</button>
               </div>
               <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab">
                 ayarlar içerik</div>
