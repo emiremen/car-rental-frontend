@@ -50,14 +50,11 @@
         </div>
         <ng-template #userNameSpanBlock><span *ngIf="user"
             class="d-flex align-items-center mx-3 fw-bold">{{user.firstName + " " + user.lastName}}</span></ng-template>
-        <button class="btn dropdown-toggle px-3 rounded-0" type="button" data-bs-toggle="modal"
-          data-bs-target="#profileModal">
+        <button class="btn dropdown-toggle px-3 rounded-0" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false" type="button">
           <i class="bi bi-person-circle fs-2"></i>
         </button>
-        <ul *ngIf="isLogin" class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton2">
-          <li><a class="dropdown-item" href="#">Kullanıcı Ayarları</a></li>
-          <li><a class="dropdown-item" href="#">Yeni Kullanıcı Ekle</a></li>
-          <li><a class="dropdown-item" href="#">Admin Paneli</a></li>
+        <ul *ngIf="isLogin" class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton2" style="right: 0;">
+          <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#profileModal">Kullanıcı Ayarları</a></li>
           <li>
             <hr class="dropdown-divider">
           </li>
